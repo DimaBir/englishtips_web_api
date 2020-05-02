@@ -16,7 +16,7 @@ def index():
             'body': 'The Avengers movie was so cool!'
         }
     ]
-    return render_template('index.html', title='Home', user=user, posts=posts)
+    return render_template('index.html', title='EnglishTips', user=user, posts=posts)
 
 
 if __name__ == '__main__':

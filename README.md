@@ -1,6 +1,7 @@
 # Englishtips web api
 
 The midterm features:
+------
 1. Coloring the wordiness words
 2. Coloring the verbs
 3. Coloring the noun-compound
@@ -13,6 +14,7 @@ The midterm features:
 10. Oxford dictionary
 
 The final features:
+------
 1. Confused Words
 2. Tips
 3. Sentence examples with the selected word

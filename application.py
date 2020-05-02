@@ -5,14 +5,14 @@ app = Flask(__name__, template_folder='templates')
 @app.route('/')
 @app.route('/index')
 def index():
-    user = {'username': 'Nati'}
+    user = {'username': 'Gary'}
     posts = [
         {
-            'author': {'username': 'John'},
+            'author': {'username': 'Dima'},
             'body': 'Beautiful day in Portland!'
         },
         {
-            'author': {'username': 'Susan'},
+            'author': {'username': 'Netanel'},
             'body': 'The Avengers movie was so cool!'
         }
     ]

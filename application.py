@@ -1,11 +1,11 @@
-from flask import render_template
-from app import app
+from flask import Flask, render_template
+app = Flask(__name__, template_folder='templates')
 
 
 @app.route('/')
 @app.route('/index')
 def index():
-    user = {'username': 'Miguel'}
+    user = {'username': 'Nati'}
     posts = [
         {
             'author': {'username': 'John'},
@@ -17,3 +17,7 @@ def index():
         }
     ]
     return render_template('index.html', title='Home', user=user, posts=posts)
+
+
+if __name__ == '__main__':
+    app.run()

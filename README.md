@@ -1,16 +1,16 @@
 # Englishtips web api
-web api part of Englishtips project
-1. The midterm features:
-2. Coloring the wordiness words
-3. Coloring the verbs
-4. Coloring the noun-compound
-5. Coloring the uncountable nouns
-6. Sentence structure
-7. Reading the selected text aloud
-8. Synonyms
-9. Counting the top ten words
-10. Google translate
-11. Oxford dictionary
+
+The midterm features:
+1. Coloring the wordiness words
+2. Coloring the verbs
+3. Coloring the noun-compound
+4. Coloring the uncountable nouns
+5. Sentence structure
+6. Reading the selected text aloud
+7. Synonyms
+8. Counting the top ten words
+9. Google translate
+10. Oxford dictionary
 
 The final features:
 1. Confused Words

@@ -1,5 +1,5 @@
-# englishtips_web_api
-##web api part of Englishtips project
+# Englishtips web api
+web api part of Englishtips project
 1. The midterm features:
 2. Coloring the wordiness words
 3. Coloring the verbs
@@ -12,7 +12,7 @@
 10. Google translate
 11. Oxford dictionary
 
-##The final features:
+The final features:
 1. Confused Words
 2. Tips
 3. Sentence examples with the selected word

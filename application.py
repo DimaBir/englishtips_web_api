@@ -23,8 +23,13 @@ def index():
 def test():
     content = request.get_json()
     print(content)
-    response = {"Text": "Hello " + content['name'] + ", I know that you are " + str(content['age']) + " years old."}
-    return jsonify(response)
+
+    response_json = {
+        "Text": "Hello " + content['name'] + ", I know that you are " + str(content['age']) + " years old.",
+        "indexes": [1, 10, 16, 17, 201]
+    }
+
+    return jsonify(response_json)
 
 
 if __name__ == '__main__':

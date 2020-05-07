@@ -1,3 +1,6 @@
+import json
+
+from verbs import find_verbs
 from flask import Flask, render_template, request, jsonify
 app = Flask(__name__, template_folder='templates')
 
@@ -30,6 +33,16 @@ def test():
     }
 
     return jsonify(response_json)
+
+
+@app.route('/api/verbs', methods=['POST'])
+def verbs():
+    content = request.get_json()
+    print(content)
+
+    result_dic = find_verbs(content['text'])
+
+    return json.dumps(result_dic)
 
 
 if __name__ == '__main__':

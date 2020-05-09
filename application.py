@@ -1,6 +1,7 @@
 import json
 
 from verbs import find_verbs
+from google_translate import google_translate
 from flask import Flask, render_template, request, jsonify
 app = Flask(__name__, template_folder='templates')
 
@@ -39,8 +40,16 @@ def test():
 def verbs():
     content = request.get_json()
     print(content)
-
     result_dic = find_verbs(content['text'])
+
+    return json.dumps(result_dic)
+
+
+@app.route('/api/translate', methods=['POST'])
+def translate():
+    content = request.get_json()
+    print(content)
+    result_dic = google_translate(content['text'], content['language'])
 
     return json.dumps(result_dic)
 

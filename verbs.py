@@ -1,10 +1,4 @@
-import itertools
-
 import nltk
-from nltk import pos_tag
-from nltk.corpus import wordnet
-from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize, sent_tokenize
 
 
 def find_index(text, word):
@@ -20,8 +14,6 @@ def find_index(text, word):
 
 
 def find_verbs(text: None):
-    nltk.download('punkt')
-    nltk.download('averaged_perceptron_tagger')
     result = {}
     tokens = nltk.word_tokenize(text)
     tagged = nltk.pos_tag(tokens)

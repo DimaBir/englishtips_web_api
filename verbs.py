@@ -8,7 +8,7 @@ def find_index(text, word):
 
     for i in range(len(splitted)):
         if splitted[i].lower() == word:
-            indexes.append(i)
+            indexes.append(i+1)
 
     return indexes
 

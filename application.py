@@ -49,7 +49,7 @@ def verbs():
 def translate():
     content = request.get_json()
     print(content)
-    result_dic = google_translate(content['text'], content['language'])
+    result = google_translate(content['text'], content['language'])
 
     return json.dumps(result_dic)
 

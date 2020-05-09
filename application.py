@@ -51,7 +51,7 @@ def translate():
     print(content)
     result = google_translate(content['text'], content['language'])
 
-    return json.dumps(result_dic)
+    return json.dumps(result)
 
 
 if __name__ == '__main__':

@@ -45,6 +45,9 @@ def verbs():
 
         return json.dumps(result_dic)
 
+    except KeyError as e:
+        return (str("Error (KeyError):" + e))
+
     except Exception as e:
         return (str("Error: " + e))
 
@@ -59,6 +62,7 @@ def translate():
         return json.dumps(result)
     except Exception as e:
         return (str("Error: " + e))
+
 
 if __name__ == '__main__':
     app.run()

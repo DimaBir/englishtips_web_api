@@ -45,9 +45,6 @@ def verbs():
 
         return json.dumps(result_dic)
 
-    except KeyError as e:
-        return (str("Error (KeyError):" + e))
-
     except Exception as e:
         return (str("Error: " + e))
 

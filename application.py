@@ -38,11 +38,15 @@ def test():
 
 @app.route('/api/verbs', methods=['POST'])
 def verbs():
-    content = request.get_json()
-    print(content)
-    result_dic = find_verbs(content['text'])
+    try:
+        content = request.get_json()
+        print(content)
+        result_dic = find_verbs(content['text'])
 
-    return json.dumps(result_dic)
+        return json.dumps(result_dic)
+
+    except Exception as e:
+        return (str(e))
 
 
 @app.route('/api/translate', methods=['POST'])

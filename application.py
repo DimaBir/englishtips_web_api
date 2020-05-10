@@ -1,6 +1,7 @@
 import json
 
-from verbs import find_verbs
+from verbs import find_verbs, find_verbs_per_char
+from nouns import find_nouns
 from google_translate import google_translate
 from flask import Flask, render_template, request, jsonify
 app = Flask(__name__, template_folder='templates')
@@ -45,6 +46,31 @@ def verbs():
 
         return json.dumps(result_dic)
 
+    except Exception as e:
+        return (str("Error: " + e))
+
+
+@app.route('/api/verbs2', methods=['POST'])
+def verbs2():
+    try:
+        content = request.get_json()
+        print(content)
+        result_dic = find_verbs_per_char(content['text'])
+
+        return json.dumps(result_dic)
+
+    except Exception as e:
+        return (str("Error: " + e))
+
+
+@app.route('/api/noun-compound', methods=['POST'])
+def noun_compound():
+    try:
+        content = request.get_json()
+        print(content)
+        result_dic = find_nouns(content['text'])
+
+        return json.dumps(result_dic)
     except Exception as e:
         return (str("Error: " + e))
 

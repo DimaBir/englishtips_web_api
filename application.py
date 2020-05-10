@@ -46,17 +46,19 @@ def verbs():
         return json.dumps(result_dic)
 
     except Exception as e:
-        return (str(e))
+        return (str("Error: " + e))
 
 
 @app.route('/api/translate', methods=['POST'])
 def translate():
-    content = request.get_json()
-    print(content)
-    result = google_translate(content['text'], content['language'])
+    try:
+        content = request.get_json()
+        print(content)
+        result = google_translate(content['text'], content['language'])
 
-    return json.dumps(result)
-
+        return json.dumps(result)
+    except Exception as e:
+        return (str("Error: " + e))
 
 if __name__ == '__main__':
     app.run()

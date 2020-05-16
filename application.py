@@ -1,5 +1,6 @@
 import json
 
+from timeit import default_timer as timer
 from verbs import find_verbs, find_verbs_per_char
 from nouns import find_nouns
 from google_translate import google_translate
@@ -53,9 +54,11 @@ def verbs():
 @app.route('/api/verbs2', methods=['POST'])
 def verbs2():
     try:
+        start = timer()
         content = request.get_json()
         print(content)
         result_dic = find_verbs_per_char(content['text'])
+        print(timer() - start)
 
         return json.dumps(result_dic)
 

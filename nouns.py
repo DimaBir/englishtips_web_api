@@ -1,5 +1,6 @@
 import re
 import nltk
+import string
 
 from itertools import groupby
 from operator import itemgetter
@@ -19,7 +20,7 @@ def find_nouns(text: None):
         splitted_nouns = re.split(r'\s+|[,;.-]\s*', noun)
         for spl_noun in splitted_nouns:
             if spl_noun in result.keys():
-                indexes = find_word_index(text, spl_noun, one_based=True)
+                indexes = find_word_index(text, spl_noun, one_based=False)
                 result[spl_noun] = list(set(indexes) | set(result[spl_noun]))
                 continue
             result[spl_noun] = find_word_index(text, spl_noun, one_based=True)
@@ -27,7 +28,7 @@ def find_nouns(text: None):
     return result
 
 
-def find_compund_indexes(nouns_dict: dict):
+def find_compound_indexes(nouns_dict: dict):
     """
 
     :param nouns_dict: key = noun; value = list of indexes it appeeares in
@@ -36,48 +37,63 @@ def find_compund_indexes(nouns_dict: dict):
     # Concatenate Indexes
     all_indexes = []
     for noun in nouns_dict:
-        all_indexes = all_indexes + nouns_dict[noun]
+        for index in nouns_dict[noun][0]:
+            all_indexes.append((index, nouns_dict[noun][1]))
 
     return all_indexes
 
 
 def find_noun_compound(text: None):
-    start = timer()
     result = {}
+    noun_compound_indexes = []
+
+    original_text = text
+    text = text.replace(".", " . ").replace(",", " , ").lower()
+
     tokens = nltk.word_tokenize(text)
-    nouns = [word for (word, pos) in nltk.pos_tag(tokens) if (pos[:2] == 'NN')]
+    nouns = list(set([word for (word, pos) in nltk.pos_tag(tokens) if (pos[:2] == 'NN')]))
 
+    # Finds all occurrences of nouns in text
     for noun in nouns:
-        splitted_nouns = re.split(r'\s+|[,;.-]\s*', noun)
-        for spl_noun in splitted_nouns:
-            if spl_noun in result.keys():
-                indexes = find_word_index(text, spl_noun, one_based=True)
-                result[spl_noun] = list(set(indexes) | set(result[spl_noun]))
-                continue
-            result[spl_noun] = find_word_index(text, spl_noun, one_based=True)
+        indexes, length = find_first_char_index(original_text.lower(), noun, one_based=False)
+        result[noun] = (indexes, length)
 
-    indexes = find_compund_indexes(result)
-    for _, g in groupby(enumerate(indexes), lambda ix: ix[0] - ix[1]):
-        compound = list(map(itemgetter(1), g))
-        if len(compound) == 1:
+    # Sorts all indexes
+    sorted_indexes = sorted(find_compound_indexes(result), key=lambda x: x[0])
+
+    # Finds continuous indexes - noun-compounds
+    # TODO: To function
+    counter = 0
+    prev_index = 0
+    grouped_indexes = []
+
+    for i in range(len(sorted_indexes)):
+        current_index = sorted_indexes[i][0]  # the beginning of the word
+        end_index = sorted_indexes[i][0] + sorted_indexes[i][1]  # the end of the word = current_index + length
+
+        # If there are subwords of words, skip. Like: six-pack and pack => (48, 8) (52, 4)
+        if current_index < prev_index:
             continue
-        result.append(compound)
+        # If next word starts where the previous ends this is continuous nouns, that we are looking
+        if counter < 1 or prev_index == current_index - 1:
+            prev_index = end_index
+            grouped_indexes.append((sorted_indexes[i][0], sorted_indexes[i][1]))
+            counter = counter + 1
+        # If there word that doesnt starts where previuos ends, check if we get noun_compound and reset variables
+        else:
+            # If we get two or more continious nouns, remeber them
+            if counter >= 2:
 
-    server_execution_time = timer() - start
-    return result, server_execution_time
+                first = grouped_indexes[0][0]
+                last = grouped_indexes[-1][0] + grouped_indexes[-1][1]
 
+                noun_compound_indexes.append([first, last])
 
-if __name__ == '__main__':
-    dict = {
-        "has": [1, 3, 7, 10, 12, 15, 17, 18, 20, 30, 40, 50, 60, 70, 80, 85, 90, 95],
-        "eatten": [4, 5, 11, 16, 17, 18, 23, 31, 45, 55, 61, 62, 81, 86, 91, 96]
-    }
-
-    result = sorted(find_compund_indexes(dict))
-    for k, g in groupby(enumerate(result), lambda ix: ix[0] - ix[1]):
-        compound = list(map(itemgetter(1), g))
-        if len(compound) == 1:
+            # Reset all variables and keep looking
+            counter = 0
+            prev_index = end_index
+            grouped_indexes.clear()
             continue
-        print(compound)
 
-    print('Elapsed time {:.6f}'.format())
+    return noun_compound_indexes
+

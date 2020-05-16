@@ -2,7 +2,7 @@ import json
 
 from timeit import default_timer as timer
 from verbs import find_verbs, find_verbs_per_char
-from nouns import find_nouns
+from nouns import find_nouns, find_noun_compound
 from google_translate import google_translate
 from flask import Flask, render_template, request, jsonify
 app = Flask(__name__, template_folder='templates')
@@ -69,11 +69,17 @@ def verbs2():
 @app.route('/api/noun-compound', methods=['POST'])
 def noun_compound():
     try:
+        start = timer()
         content = request.get_json()
         print(content)
-        result_dic = find_nouns(content['text'])
+        result = find_noun_compound(content['text'])
 
-        return json.dumps(result_dic)
+        result = {
+            "result": result,
+            "ServerExecutionTime": timer() - start
+        }
+
+        return json.dumps(result)
     except Exception as e:
         return (str("Error: " + e))
 

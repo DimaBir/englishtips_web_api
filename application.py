@@ -78,7 +78,6 @@ def noun_compound():
             "result": result,
             "ServerExecutionTime": timer() - start
         }
-
         return json.dumps(result)
     except Exception as e:
         return (str("Error: " + e))

@@ -1,10 +1,6 @@
 import re
 import nltk
-import string
 
-from itertools import groupby
-from operator import itemgetter
-from timeit import default_timer as timer
 from utils import find_word_index, find_first_char_index
 
 nltk.download('punkt')

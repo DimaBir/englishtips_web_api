@@ -81,7 +81,7 @@ def find_noun_compound(text: None):
             if counter >= 2:
 
                 first = grouped_indexes[0][0]
-                last = grouped_indexes[-1][0] + grouped_indexes[-1][1] - 1
+                last = grouped_indexes[-1][0] + grouped_indexes[-1][1] - first - 1
 
                 noun_compound_indexes.append([first, last])
 

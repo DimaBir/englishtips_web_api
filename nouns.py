@@ -3,9 +3,6 @@ import nltk
 
 from utils import find_word_index, find_first_char_index
 
-nltk.download('punkt')
-nltk.download('averaged_perceptron_tagger')
-
 
 def find_nouns(text: None):
     result = {}

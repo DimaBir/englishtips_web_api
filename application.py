@@ -55,7 +55,7 @@ def verbs():
         return json.dumps(result_dic)
 
     except Exception as e:
-        return (str("Error: " + e))
+        return str("Error: " + e)
 
 
 @app.route('/api/verbs2', methods=['POST'])
@@ -70,7 +70,7 @@ def verbs2():
         return json.dumps(result_dic)
 
     except Exception as e:
-        return (str("Error: " + e))
+        return str("Error: " + e)
 
 
 @app.route('/api/noun-compound', methods=['POST'])
@@ -87,7 +87,7 @@ def noun_compound():
         }
         return json.dumps(result)
     except Exception as e:
-        return (str("Error: " + e))
+        return str("Error: " + e)
 
 
 @app.route('/api/uncountable', methods=['POST'])
@@ -104,7 +104,7 @@ def uncountable():
         # }
         return json.dumps(result)
     except Exception as e:
-        return (str("Error: " + e))
+        return str("Error: " + e)
 
 
 @app.route('/api/syn', methods=['POST'])
@@ -122,7 +122,7 @@ def synonym():
 
         return json.dumps(result)
     except Exception as e:
-        return (str("Error: " + e))
+        return str("Error: " + e)
 
 
 @app.route('/api/translate', methods=['POST'])
@@ -134,7 +134,7 @@ def translate():
 
         return json.dumps(result)
     except Exception as e:
-        return (str("Error: " + e))
+        return str("Error: " + e)
 
 
 if __name__ == '__main__':

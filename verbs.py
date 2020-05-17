@@ -4,9 +4,6 @@ from utils import find_word_index, find_first_char_index
 
 
 def find_verbs(text: None):
-    nltk.download('punkt')
-    nltk.download('averaged_perceptron_tagger')
-
     result = {}
     tokens = nltk.word_tokenize(text)
     tagged = nltk.pos_tag(tokens)
@@ -19,9 +16,6 @@ def find_verbs(text: None):
 
 
 def find_verbs_per_char(text: None):
-    nltk.download('punkt')
-    nltk.download('averaged_perceptron_tagger')
-
     result = []
     tokens = nltk.word_tokenize(text)
     tagged = nltk.pos_tag(tokens)
@@ -42,8 +36,6 @@ def find_verbs_per_char(text: None):
 
 
 if __name__ == '__main__':
-    nltk.download('punkt')
-    nltk.download('averaged_perceptron_tagger')
     result = find_verbs("Ian has written over four hundred articles has written on the subject.")
 
     print("Done")

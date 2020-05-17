@@ -91,9 +91,15 @@ def noun_compound():
 @app.route('/api/syn', methods=['POST'])
 def synonym():
     try:
+        start = timer()
         content = request.get_json()
         print(content)
-        result = find_synonyms(content['text'], content['language'])
+        synonyms, antonyms = find_synonyms(content['word'])
+
+        result = {
+            "result": synonyms,
+            "ServerExecutionTime": timer() - start
+        }
 
         return json.dumps(result)
     except Exception as e:

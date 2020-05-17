@@ -1,4 +1,7 @@
+import nltk
 from nltk.corpus import wordnet
+
+nltk.download('wordnet')  # TODO: Ask do wee need to download it every time
 
 
 def find_synonyms(word: str):

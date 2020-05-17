@@ -9,9 +9,9 @@ from google_translate import google_translate
 from flask import Flask, render_template, request, jsonify
 app = Flask(__name__, template_folder='templates')
 
-nltk.download('wordnet')
-nltk.download('punkt')
-nltk.download('averaged_perceptron_tagger')
+# nltk.download('wordnet')
+# nltk.download('punkt')
+# nltk.download('averaged_perceptron_tagger')
 
 @app.route('/')
 @app.route('/index')

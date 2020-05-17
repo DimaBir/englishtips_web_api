@@ -1,12 +1,17 @@
 import json
+import nltk
 
 from timeit import default_timer as timer
+from synonym import find_synonyms
 from verbs import find_verbs, find_verbs_per_char
 from nouns import find_nouns, find_noun_compound
 from google_translate import google_translate
 from flask import Flask, render_template, request, jsonify
 app = Flask(__name__, template_folder='templates')
 
+nltk.download('wordnet')
+nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
 
 @app.route('/')
 @app.route('/index')
@@ -78,6 +83,18 @@ def noun_compound():
             "result": result,
             "ServerExecutionTime": timer() - start
         }
+        return json.dumps(result)
+    except Exception as e:
+        return (str("Error: " + e))
+
+
+@app.route('/api/syn', methods=['POST'])
+def synonym():
+    try:
+        content = request.get_json()
+        print(content)
+        result = find_synonyms(content['text'], content['language'])
+
         return json.dumps(result)
     except Exception as e:
         return (str("Error: " + e))

@@ -5,6 +5,7 @@ from timeit import default_timer as timer
 from synonym import find_synonyms
 from uncountable_nouns import find_uncountable_nouns
 from wordiness import find_wordiness
+from toptenwords import find_top_ten_words
 from verbs import find_verbs, find_verbs_per_char
 from nouns import find_nouns, find_noun_compound
 from google_translate import google_translate
@@ -111,6 +112,23 @@ def wordiness():
         content = request.get_json()
         print(content)
         result = find_wordiness(content['text'])
+
+        result = {
+            "Result": result,
+            "ServerExecutionTime": timer() - start
+        }
+        return json.dumps(result)
+    except Exception as e:
+        return str("Error: " + e)
+
+
+@app.route('/api/topwords', methods=['POST'])
+def top_words():
+    try:
+        start = timer()
+        content = request.get_json()
+        print(content)
+        result = find_top_ten_words(content['text'])
 
         result = {
             "Result": result,

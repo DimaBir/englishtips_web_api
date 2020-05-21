@@ -6,7 +6,7 @@ from nltk.tokenize import word_tokenize
 
 from utils import find_first_char_index
 
-# nltk.download('stopwords')
+nltk.download('stopwords')
 
 
 def word_list_to_freq_dict(wordlist):

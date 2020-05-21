@@ -30,7 +30,8 @@ def find_top_ten_words(text, top_k_elements=10):
     # remove punctuations from text
     clear_text = text.translate(str.maketrans('', '', string.punctuation))
     text_tokens = word_tokenize(clear_text.lower())
-    wordlist = [word for word in text_tokens if word not in stopwords.words()]
+    stopWords = set(stopwords.words("english"))
+    wordlist = [word for word in text_tokens if word not in stopWords]
 
     freq_dict = word_list_to_freq_dict(wordlist)
     sorted_freq = sort_freq_dict(freq_dict)

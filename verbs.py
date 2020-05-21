@@ -2,8 +2,8 @@ import nltk
 
 from utils import find_word_index, find_first_char_index
 
-nltk.download('punkt')  # TODO: Ask do wee need to download it every time
-nltk.download('averaged_perceptron_tagger')
+# nltk.download('punkt')  # TODO: Ask do wee need to download it every time
+# nltk.download('averaged_perceptron_tagger')
 
 
 def find_verbs(text: None):

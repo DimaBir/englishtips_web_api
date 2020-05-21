@@ -170,4 +170,8 @@ def translate():
 
 
 if __name__ == '__main__':
-    app.run()
+    nltk.download('wordnet')
+    nltk.download('punkt')
+    nltk.download('averaged_perceptron_tagger')
+
+    app.run(threaded=True)

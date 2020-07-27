@@ -10,7 +10,9 @@ from verbs import find_verbs, find_verbs_per_char
 from nouns import find_nouns, find_noun_compound
 from google_translate import google_translate
 from flask import Flask, render_template, request, jsonify
+
 app = Flask(__name__, template_folder='templates')
+
 
 # nltk.download('wordnet')
 # nltk.download('punkt')
@@ -144,12 +146,20 @@ def synonym():
     try:
         start = timer()
         content = request.get_json()
+        if len(content['word'].split()) != 1:
+            return json.dumps({
+                "result": None,
+                "ServerExecutionTime": timer() - start,
+                "Error": "Error: Please, choose one word and try again."
+            })
+        content['word'] = content['word'].strip()
         print(content)
         synonyms, antonyms = find_synonyms(content['word'])
 
         result = {
             "result": synonyms,
-            "ServerExecutionTime": timer() - start
+            "ServerExecutionTime": timer() - start,
+            "Error": None
         }
 
         return json.dumps(result)

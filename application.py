@@ -24,7 +24,6 @@ app = Flask(__name__, template_folder='templates')
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + SERVER_PATH
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config["APPLICATION_ROOT"] = "/englishtips"
 
 db.init_app(app)
 

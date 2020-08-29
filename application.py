@@ -1,7 +1,6 @@
 import os
 import json
 
-
 from timeit import default_timer as timer
 from acronyms import find_acronyms
 from confused_word import get_confused_word
@@ -30,8 +29,10 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
 
-# if not os.path.isfile(SERVER_PATH):
-#     fill_database()
+
+if not os.path.isfile(SERVER_PATH):
+    fill_database()
+
 
 @app.route('/')
 @app.route('/index')
@@ -266,8 +267,8 @@ def confused_word():
         result = {
             "result": None if confused_word is None else confused_word.note,
             "ServerExecutionTime": timer() - start,
-            "Error": None if confused_word is not None else f"Error: The {content['word']} "    
-                                                        f"is not in the confused words list"
+            "Error": None if confused_word is not None else f"Error: The {content['word']} "
+                                                            f"is not in the confused words list"
         }
 
         return json.dumps(result)
@@ -288,7 +289,8 @@ def translate():
 
 
 if __name__ == '__main__':
-	import ssl
-	context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-	context.load_cert_chain('avrl_cs_technion_ac_il.crt', 'AVRL_cs_technion_ac_il.key')
-	app.run(host="0.0.0.0", port=80, ssl_context=context, threaded=True, debug=False)
+    import ssl
+
+    context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+    context.load_cert_chain('avrl_cs_technion_ac_il.crt', 'AVRL_cs_technion_ac_il.key')
+    app.run(host="0.0.0.0", port=80, ssl_context=context, threaded=True, debug=False)

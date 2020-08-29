@@ -9,14 +9,9 @@ from toptenwords import find_top_ten_words
 from verbs import find_verbs, find_verbs_per_char
 from nouns import find_nouns, find_noun_compound
 from google_translate import google_translate
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, url_for
 
 app = Flask(__name__, template_folder='templates')
-
-
-# nltk.download('wordnet')
-# nltk.download('punkt')
-# nltk.download('averaged_perceptron_tagger')
 
 
 @app.route('/')
@@ -59,7 +54,7 @@ def verbs():
         return json.dumps(result_dic)
 
     except Exception as e:
-        return str("Error: " + e)
+        return str("Error: " + str(e))
 
 
 @app.route('/api/verbs2', methods=['POST'])
@@ -74,7 +69,7 @@ def verbs2():
         return json.dumps(result_dic)
 
     except Exception as e:
-        return str("Error: " + e)
+        return str("Error: " + str(e))
 
 
 @app.route('/api/noun-compound', methods=['POST'])
@@ -91,20 +86,19 @@ def noun_compound():
         }
         return json.dumps(result)
     except Exception as e:
-        return str("Error: " + e)
+        return str("Error: " + str(e))
 
 
 @app.route('/api/uncountable', methods=['POST'])
 def uncountable():
     try:
-        start = timer()
         content = request.get_json()
         print(content)
         result = find_uncountable_nouns(content['text'])
 
         return json.dumps(result)
     except Exception as e:
-        return str("Error: " + e)
+        return str("Error: " + str(e))
 
 
 @app.route('/api/wordiness', methods=['POST'])
@@ -121,7 +115,7 @@ def wordiness():
         }
         return json.dumps(result)
     except Exception as e:
-        return str("Error: " + e)
+        return str("Error: " + str(e))
 
 
 @app.route('/api/topwords', methods=['POST'])
@@ -138,7 +132,7 @@ def top_words():
         }
         return json.dumps(result)
     except Exception as e:
-        return str("Error: " + e)
+        return str("Error: " + str(e))
 
 
 @app.route('/api/syn', methods=['POST'])
@@ -164,7 +158,7 @@ def synonym():
 
         return json.dumps(result)
     except Exception as e:
-        return str("Error: " + e)
+        return str("Error: " + str(e))
 
 
 @app.route('/api/translate', methods=['POST'])
@@ -176,7 +170,7 @@ def translate():
 
         return json.dumps(result)
     except Exception as e:
-        return str("Error: " + e)
+        return str("Error: " + str(e))
 
 
 if __name__ == '__main__':

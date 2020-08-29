@@ -8,6 +8,9 @@ def get_confused_word(word: str) -> ConfusedWord:
     :param word:
     :return:
     """
+    result = get_item(word)
+    return result
 
-    confused_word = get_confused_word(word)
-    return confused_word
+
+if __name__ == '__main__':
+    get_confused_word("dog")

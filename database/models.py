@@ -1,7 +1,6 @@
-import os
+from flask_sqlalchemy import SQLAlchemy
 
-from application import db, SERVER_PATH
-from database import setupdatabase as db_utils
+db = SQLAlchemy()
 
 
 class ConfusedWord(db.Model):
@@ -20,5 +19,4 @@ class ConfusedWord(db.Model):
 
 
 if __name__ == '__main__':
-    if not os.path.isfile(SERVER_PATH):
-        db_utils.setup_db()
+    pass

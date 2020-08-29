@@ -3,11 +3,10 @@ import json
 
 
 from timeit import default_timer as timer
-from flask_sqlalchemy import SQLAlchemy
-
 from acronyms import find_acronyms
 from confused_word import get_confused_word
-from database.setupdatabase import setup_db
+from database.models import db
+from database.setupdatabase import fill_database
 from hypernyms import find_hypernyms
 from hyponyms import find_hyponyms
 from synonym import find_synonyms
@@ -26,8 +25,13 @@ app = Flask(__name__, template_folder='templates')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + SERVER_PATH
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db = SQLAlchemy(app)
+db.init_app(app)
 
+with app.app_context():
+    db.create_all()
+
+if not os.path.isfile(SERVER_PATH):
+    fill_database()
 
 @app.route('/')
 @app.route('/index')
@@ -260,9 +264,10 @@ def confused_word():
         confused_word = get_confused_word(content['word'])
 
         result = {
-            "result": confused_word,
+            "result": None if confused_word is None else confused_word.note,
             "ServerExecutionTime": timer() - start,
-            "Error": None if confused_word else "Error: None has returned"
+            "Error": None if confused_word is not None else f"Error: The {content['word']} "    
+                                                        f"is not in the confused words list"
         }
 
         return json.dumps(result)
@@ -283,5 +288,4 @@ def translate():
 
 
 if __name__ == '__main__':
-    setup_db()
     app.run(threaded=True)

@@ -1,7 +1,6 @@
 import os
 
-from application import db, SERVER_PATH
-from database.models import ConfusedWord
+from database.models import ConfusedWord, db
 
 
 def fill_database():
@@ -28,12 +27,6 @@ def fill_database():
         print("Entry: Word: {}; Note: {} has been added to db".format(word, note))
 
 
-def setup_db():
-    if not os.path.isfile(SERVER_PATH):
-        db.create_all()
-        fill_database()
-
-
 if __name__ == '__main__':
-    setup_db()
+    fill_database()
 

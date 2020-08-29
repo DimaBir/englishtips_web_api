@@ -30,8 +30,8 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
 
-if not os.path.isfile(SERVER_PATH):
-    fill_database()
+# if not os.path.isfile(SERVER_PATH):
+#     fill_database()
 
 @app.route('/')
 @app.route('/index')

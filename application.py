@@ -1,9 +1,13 @@
+import os
 import json
-import nltk
+
 
 from timeit import default_timer as timer
+from flask_sqlalchemy import SQLAlchemy
 
 from acronyms import find_acronyms
+from confused_word import get_confused_word
+from database.setupdatabase import setup_db
 from hypernyms import find_hypernyms
 from hyponyms import find_hyponyms
 from synonym import find_synonyms
@@ -15,24 +19,20 @@ from nouns import find_nouns, find_noun_compound
 from google_translate import google_translate
 from flask import Flask, render_template, request, jsonify, url_for
 
+BASEDIR = os.path.abspath(os.path.dirname(__file__))
+SERVER_PATH = os.path.join(BASEDIR, 'db.sqlite')
 app = Flask(__name__, template_folder='templates')
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + SERVER_PATH
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
 
 
 @app.route('/')
 @app.route('/index')
 def index():
-    user = {'username': 'Gary'}
-    posts = [
-        {
-            'author': {'username': 'Dima'},
-            'body': 'Beautiful day in Portland!'
-        },
-        {
-            'author': {'username': 'Netanel'},
-            'body': 'The Avengers movie was so cool!'
-        }
-    ]
-    return render_template('index.html', title='EnglishTips', user=user, posts=posts)
+    return render_template('index.html', title='EnglishTips')
 
 
 @app.route('/api/test', methods=['POST'])
@@ -244,6 +244,32 @@ def hyponyms():
         return str("Error: " + str(e))
 
 
+@app.route('/api/confused_word', methods=['POST'])
+def confused_word():
+    try:
+        start = timer()
+        content = request.get_json()
+        if len(content['word'].split()) != 1:
+            return json.dumps({
+                "result": None,
+                "ServerExecutionTime": timer() - start,
+                "Error": "Error: Please, choose one word and try again."
+            })
+        content['word'] = content['word'].strip()
+        print(content)
+        confused_word = get_confused_word(content['word'])
+
+        result = {
+            "result": confused_word,
+            "ServerExecutionTime": timer() - start,
+            "Error": None if confused_word else "Error: None has returned"
+        }
+
+        return json.dumps(result)
+    except Exception as e:
+        return str("Error: " + str(e))
+
+
 @app.route('/api/translate', methods=['POST'])
 def translate():
     try:
@@ -257,4 +283,5 @@ def translate():
 
 
 if __name__ == '__main__':
+    setup_db()
     app.run(threaded=True)

@@ -28,9 +28,6 @@ db.init_app(app)
 
 with app.app_context():
     db.create_all()
-
-
-if not os.path.isfile(SERVER_PATH):
     fill_database()
 
 
@@ -289,8 +286,8 @@ def translate():
 
 
 if __name__ == '__main__':
-    import ssl
+    # import ssl
 
-    context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-    context.load_cert_chain('avrl_cs_technion_ac_il.crt', 'AVRL_cs_technion_ac_il.key')
-    app.run(host="0.0.0.0", port=80, ssl_context=context, threaded=True, debug=False)
+    # context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+    # context.load_cert_chain('avrl_cs_technion_ac_il.crt', 'AVRL_cs_technion_ac_il.key')
+    app.run()  #host="0.0.0.0", port=80, ssl_context=context, threaded=True, debug=False)

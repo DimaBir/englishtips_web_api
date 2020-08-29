@@ -4,7 +4,7 @@ from database.models import ConfusedWord, db
 
 
 def fill_database():
-    file = open('confused words.txt', 'r')
+    file = open(os.path.join(os.path.dirname(__file__) + '/confused words.txt'), 'r')
 
     for line in file.readlines():
         lines_words = line.split()

@@ -15,19 +15,19 @@ The midterm features:
 
 The final features:
 ------
-1. Tips:
-  1. Sentence structure
-  2. Confused Words
-  3. Sentence examples with the selected word
-2. Useful phrases.
-3. Acronyms, hyponymy and hypernymy.
-4. Analytics:
-  1. Counting the top ten words
-  2. De-Jargonizer  (Checking)
-  3. Sentence length (Average, >30)
-5. Deep Learning (Checking):
-6. Checking sentences with deep learning
-7. Summary
-8. Oxford dictionary Anther good dictionary or Word Net (Checking)
-9. Coloring -> Mark (+Icons)
-10. About
+- Tips:
+  - Sentence structure
+  - Confused Words
+  - Sentence examples with the selected word
+- Useful phrases.
+- Acronyms, hyponymy and hypernymy.
+- Analytics:
+  - Counting the top ten words
+  - De-Jargonizer  (Checking)
+  - Sentence length (Average, >30)
+- Deep Learning (Checking):
+- Checking sentences with deep learning
+- Summary
+- Oxford dictionary Anther good dictionary or Word Net (Checking)
+- Coloring -> Mark (+Icons)
+- About

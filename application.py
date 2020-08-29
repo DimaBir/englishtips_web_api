@@ -24,6 +24,7 @@ app = Flask(__name__, template_folder='templates')
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + SERVER_PATH
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config["APPLICATION_ROOT"] = "/englishtips"
 
 db.init_app(app)
 
@@ -288,4 +289,7 @@ def translate():
 
 
 if __name__ == '__main__':
-    app.run(threaded=True)
+	import ssl
+	context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+	context.load_cert_chain('avrl_cs_technion_ac_il.crt', 'AVRL_cs_technion_ac_il.key')
+	app.run(host="0.0.0.0", port=80, ssl_context=context, threaded=True, debug=False)

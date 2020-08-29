@@ -16,15 +16,15 @@ The midterm features:
 The final features:
 ------
 1. Tips:
-..a. Sentence structure
-..b. Confused Words
-..c. Sentence examples with the selected word
+..1. Sentence structure
+..2. Confused Words
+..3. Sentence examples with the selected word
 2. Useful phrases.
 3. Acronyms, hyponymy and hypernymy.
 4. Analytics:
-..a. Counting the top ten words
-..b. De-Jargonizer  (Checking)
-..c. Sentence length (Average, >30)
+..1. Counting the top ten words
+..2. De-Jargonizer  (Checking)
+..3. Sentence length (Average, >30)
 5. Deep Learning (Checking):
 6. Checking sentences with deep learning
 7. Summary

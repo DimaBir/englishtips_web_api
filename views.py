@@ -2,6 +2,10 @@ import json
 import nltk
 
 from timeit import default_timer as timer
+
+from acronyms import find_acronyms
+from hypernyms import find_hypernyms
+from hyponyms import find_hyponyms
 from synonym import find_synonyms
 from uncountable_nouns import find_uncountable_nouns
 from wordiness import find_wordiness
@@ -152,6 +156,85 @@ def synonym():
 
         result = {
             "result": synonyms,
+            "ServerExecutionTime": timer() - start,
+            "Error": None
+        }
+
+        return json.dumps(result)
+    except Exception as e:
+        return str("Error: " + str(e))
+
+
+@app.route('/api/acr', methods=['POST'])
+def acronyms():
+    try:
+        start = timer()
+        content = request.get_json()
+        if len(content['word'].split()) != 1:
+            return json.dumps({
+                "result": None,
+                "ServerExecutionTime": timer() - start,
+                "Error": "Error: Please, choose one word and try again."
+            })
+        content['word'] = content['word'].strip()
+        print(content)
+        acronym_result, definition = find_acronyms(content['word'])
+
+        result = {
+            "result": acronym_result,
+            "definition": definition,
+            "ServerExecutionTime": timer() - start,
+            "Error": None
+        }
+
+        return json.dumps(result)
+    except Exception as e:
+        return str("Error: " + str(e))
+
+
+@app.route('/api/hyper', methods=['POST'])
+def hypernyms():
+    try:
+        start = timer()
+        content = request.get_json()
+        if len(content['word'].split()) != 1:
+            return json.dumps({
+                "result": None,
+                "ServerExecutionTime": timer() - start,
+                "Error": "Error: Please, choose one word and try again."
+            })
+        content['word'] = content['word'].strip()
+        print(content)
+        hypernyms = find_hypernyms(content['word'])
+
+        result = {
+            "result": hypernyms,
+            "ServerExecutionTime": timer() - start,
+            "Error": None
+        }
+
+        return json.dumps(result)
+    except Exception as e:
+        return str("Error: " + str(e))
+
+
+@app.route('/api/hypon', methods=['POST'])
+def hyponyms():
+    try:
+        start = timer()
+        content = request.get_json()
+        if len(content['word'].split()) != 1:
+            return json.dumps({
+                "result": None,
+                "ServerExecutionTime": timer() - start,
+                "Error": "Error: Please, choose one word and try again."
+            })
+        content['word'] = content['word'].strip()
+        print(content)
+        hyponyms = find_hyponyms(content['word'])
+
+        result = {
+            "result": hyponyms,
             "ServerExecutionTime": timer() - start,
             "Error": None
         }

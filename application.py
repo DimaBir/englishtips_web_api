@@ -64,7 +64,7 @@ def upload_file():
             app.instance_path, 'version', filename
         ))
         flash('File uploaded successfully')
-        return redirect(url_for('upload_file'))
+        return redirect(url_for('index'))
         # if request.method == 'POST':
         #     f = request.files['file']
         #     f = form.photo.data

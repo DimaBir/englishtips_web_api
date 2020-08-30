@@ -77,18 +77,8 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            flash('File uploaded successfully', 'success')
+            flash(f'{file.filename} uploaded successfully', 'success')
             return redirect(url_for('upload_file'))
-    # if request.method == 'POST':
-    #     f = request.files['file']
-    #     if not os.path.exists(UPLOAD_FOLDER):
-    #         os.makedirs(UPLOAD_FOLDER)
-    #     if allowed_file(f.filename):
-    #         f.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(f.filename)))
-    #         flash('File uploaded successfully')
-    #     else:
-    #         flash('Not allowed extension, please choose *.zip file')
-    #     return redirect(url_for('upload_file'))
 
     return render_template('upload.html')
 

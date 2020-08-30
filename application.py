@@ -22,6 +22,7 @@ from flask import Flask, render_template, request, jsonify, url_for
 
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
 SERVER_PATH = os.path.join(BASEDIR, 'db.sqlite')
+VERSION_FILE_PATH = os.path.join(BASEDIR, '/version/')
 app = Flask(__name__, template_folder='templates')
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + SERVER_PATH
@@ -49,7 +50,7 @@ def upload_file():
 def uploader_file():
     if request.method == 'POST':
         f = request.files['file']
-        f.save(secure_filename(f.filename))
+        f.save(VERSION_FILE_PATH + secure_filename(f.filename))
         return 'file uploaded successfully'
 
 

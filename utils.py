@@ -2,7 +2,7 @@ import re
 
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileRequired, FileAllowed
-from wtforms import FileField
+from wtforms import FileField, SubmitField
 
 
 class UploadForm(FlaskForm):
@@ -10,6 +10,7 @@ class UploadForm(FlaskForm):
         FileRequired(),
         FileAllowed(['zip', 'txt'], 'ZIP archive only!')
     ])
+    submit = SubmitField('Upload')
 
 
 def find_word_index(text, word, one_based=False):

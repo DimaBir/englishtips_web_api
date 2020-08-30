@@ -17,7 +17,7 @@
        {% endfor %}
        <form method="POST" enctype="multipart/form-data">
            {{ form.hidden_tag() }}
-           {{ form.upload() }}
+           {{ form.upload() }} {{ form.submit() }}
        </form>
    </body>
 </html>

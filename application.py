@@ -69,6 +69,11 @@ def upload_file():
         if not allowed_file(file.filename):
             flash('File must be ZIP.', 'warning')
             return redirect(request.url)
+        file.seek(0, 2)
+        file_size = file.tell()
+        if file_size > app.config['MAX_CONTENT_LENGTH']:
+            flash(f"File size must be at most {app.config['MAX_CONTENT_LENGTH']}", "error")
+            return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))

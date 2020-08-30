@@ -8,17 +8,19 @@ from werkzeug.utils import secure_filename
 from acronyms import find_acronyms
 from confused_word import get_confused_word
 from database.models import db
-from database.setupdatabase import fill_database
 from hypernyms import find_hypernyms
 from hyponyms import find_hyponyms
 from synonym import find_synonyms
 from uncountable_nouns import find_uncountable_nouns
+from utils import UploadForm
 from wordiness import find_wordiness
 from toptenwords import find_top_ten_words
 from verbs import find_verbs, find_verbs_per_char
 from nouns import find_nouns, find_noun_compound
 from google_translate import google_translate
-from flask import Flask, render_template, request, jsonify, url_for
+from flask import Flask, render_template, request, jsonify, url_for, flash, redirect
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
 
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
 SERVER_PATH = os.path.join(BASEDIR, 'db.sqlite')
@@ -31,6 +33,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 0.5 * 1024 * 1024
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + SERVER_PATH
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = 'ba86103dafb9ec379d26c7bd92206424'
 
 db.init_app(app)
 
@@ -63,8 +66,10 @@ def uploader_file():
             os.makedirs(UPLOAD_FOLDER)
         if allowed_file(f.filename):
             f.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(f.filename)))
-            return 'File uploaded successfully'
-        return 'Not allowed extension, please choose *.zip file'
+            flash('File uploaded successfully')
+            return redirect(url_for('upload_file'))
+        flash('Not allowed extension, please choose *.zip file')
+        return redirect(url_for('upload_file'))
 
 
 @app.route('/api/test', methods=['POST'])

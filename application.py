@@ -23,14 +23,14 @@ from flask import Flask, render_template, request, jsonify, url_for, flash, redi
 
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
 SERVER_PATH = os.path.join(BASEDIR, 'db.sqlite')
-UPLOAD_FOLDER = os.path.join(os.path.realpath(__file__), '/englishtips/englishtips_web_api/version/')
+UPLOAD_FOLDER = os.path.join(os.path.abspath(os.path.dirname(__file__)), '/version/')
 ALLOWED_EXTENSIONS = {'txt', 'zip'}
 
 app = Flask(__name__, template_folder='templates')
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 MAX_UPLOAD_SIZE_MB = 1
-# app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024
+app.config['MAX_CONTENT_LENGTH'] = MAX_UPLOAD_SIZE_MB * 1024 * 1024
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + SERVER_PATH
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'ba86103dafb9ec379d26c7bd92206424'
@@ -74,11 +74,11 @@ def upload_file():
         if not allowed_file(file.filename):
             flash('File must be ZIP.', 'error')
             return redirect(request.url)
-        request.files['file'].save('/tmp/foo')
-        file_size = os.stat('/tmp/foo').st_size
-        if file_size > MAX_UPLOAD_SIZE_MB * 1024 * 1024:
-            flash(f'File size is too large! Max size is: {MAX_UPLOAD_SIZE_MB} MB', 'error')
-            return redirect(request.url)
+        # request.files['file'].save('/tmp/foo')
+        # file_size = os.stat('/tmp/foo').st_size
+        # if file_size > MAX_UPLOAD_SIZE_MB * 1024 * 1024:
+        #     flash(f'File size is too large! Max size is: {MAX_UPLOAD_SIZE_MB} MB', 'error')
+        #     return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
@@ -92,20 +92,7 @@ def upload_file():
 def download_file():
     # TODO: Change to relative
     flash('Thank you for downloading!', 'success')
-    return send_from_directory(directory='C:/englishtips/englishtips_web_api/version', filename="publish.zip")
-
-
-@app.route('/api/test', methods=['POST'])
-def test():
-    content = request.get_json()
-    print(content)
-
-    response_json = {
-        "Text": "Hello " + content['name'] + ", I know that you are " + str(content['age']) + " years old.",
-        "indexes": [1, 10, 16, 17, 201]
-    }
-
-    return jsonify(response_json)
+    return send_from_directory(directory=app.config['UPLOAD_FOLDER'], filename="publish.zip")
 
 
 @app.route('/api/verbs', methods=['POST'])

@@ -167,7 +167,7 @@ def synonym():
         return str("Error: " + str(e))
 
 
-@app.route('/api/acr', methods=['POST'])
+@app.route('/api/acr/', methods=['POST'])
 def acronyms():
     try:
         start = timer()
@@ -194,7 +194,7 @@ def acronyms():
         return str("Error: " + str(e))
 
 
-@app.route('/api/hyper', methods=['POST'])
+@app.route('/api/hyper/', methods=['POST'])
 def hypernyms():
     try:
         start = timer()

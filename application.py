@@ -1,7 +1,11 @@
+import os
 import json
 
 from timeit import default_timer as timer
 from acronyms import find_acronyms
+from confused_word import get_confused_word
+from database.models import db
+from database.setupdatabase import fill_database
 from hypernyms import find_hypernyms
 from hyponyms import find_hyponyms
 from synonym import find_synonyms
@@ -13,7 +17,18 @@ from nouns import find_nouns, find_noun_compound
 from google_translate import google_translate
 from flask import Flask, render_template, request, jsonify, url_for
 
+BASEDIR = os.path.abspath(os.path.dirname(__file__))
+SERVER_PATH = os.path.join(BASEDIR, 'db.sqlite')
 app = Flask(__name__, template_folder='templates')
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + SERVER_PATH
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db.init_app(app)
+
+with app.app_context():
+    db.create_all()
+    # fill_database()
 
 
 @app.route('/')
@@ -152,7 +167,7 @@ def synonym():
         return str("Error: " + str(e))
 
 
-@app.route('/api/acr/', methods=['POST'])
+@app.route('/api/acr', methods=['POST'])
 def acronyms():
     try:
         start = timer()
@@ -179,7 +194,7 @@ def acronyms():
         return str("Error: " + str(e))
 
 
-@app.route('/api/hyper/', methods=['POST'])
+@app.route('/api/hyper', methods=['POST'])
 def hypernyms():
     try:
         start = timer()
@@ -231,6 +246,33 @@ def hyponyms():
         return str("Error: " + str(e))
 
 
+@app.route('/api/confused_word', methods=['POST'])
+def confused_word():
+    try:
+        start = timer()
+        content = request.get_json()
+        if len(content['word'].split()) != 1:
+            return json.dumps({
+                "result": None,
+                "ServerExecutionTime": timer() - start,
+                "Error": "Error: Please, choose one word and try again."
+            })
+        content['word'] = content['word'].strip()
+        print(content)
+        confused_word = get_confused_word(content['word'])
+
+        result = {
+            "result": None if confused_word is None else confused_word.note,
+            "ServerExecutionTime": timer() - start,
+            "Error": None if confused_word is not None else f"Error: The {content['word']} "
+                                                            f"is not in the confused words list"
+        }
+
+        return json.dumps(result)
+    except Exception as e:
+        return str("Error: " + str(e))
+
+
 @app.route('/api/translate', methods=['POST'])
 def translate():
     try:
@@ -244,4 +286,8 @@ def translate():
 
 
 if __name__ == '__main__':
-    app.run(threaded=True)
+    # import ssl
+
+    # context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+    # context.load_cert_chain('avrl_cs_technion_ac_il.crt', 'AVRL_cs_technion_ac_il.key')
+    app.run()  #host="0.0.0.0", port=80, ssl_context=context, threaded=True, debug=False)

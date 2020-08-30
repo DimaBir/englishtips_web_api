@@ -2391,6 +2391,20 @@ textarea.form-control {
     margin-bottom: 0;
   }
 }
+.download_btn {
+  background-color: #0063b2;
+  border: none;
+  color: white;
+  padding: 12px 30px;
+  cursor: pointer;
+  font-size: 20px;
+  min-width: 50px;
+}
+
+/* Darker background on mouse-over */
+.download_btn:hover {
+  background-color: RoyalBlue;
+}
 
 .btn {
   display: inline-block;

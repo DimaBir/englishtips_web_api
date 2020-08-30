@@ -18,13 +18,12 @@ from toptenwords import find_top_ten_words
 from verbs import find_verbs, find_verbs_per_char
 from nouns import find_nouns, find_noun_compound
 from google_translate import google_translate
-from flask import Flask, render_template, request, jsonify, url_for, flash, redirect
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
+from flask import Flask, render_template, request, jsonify, url_for, flash, redirect, send_from_directory, abort, \
+    send_file
 
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
 SERVER_PATH = os.path.join(BASEDIR, 'db.sqlite')
-UPLOAD_FOLDER= os.path.join(os.path.realpath(__file__), '/englishtips/englishtips_web_api/version/')
+UPLOAD_FOLDER = os.path.join(os.path.realpath(__file__), '/englishtips/englishtips_web_api/version/')
 ALLOWED_EXTENSIONS = {'txt', 'zip'}
 
 app = Flask(__name__, template_folder='templates')
@@ -84,18 +83,9 @@ def upload_file():
     return render_template('upload.html')
 
 
-@app.route('/uploader', methods=['GET', 'POST'])
-def uploader_file():
-    if request.method == 'POST':
-        f = request.files['file']
-        if not os.path.exists(UPLOAD_FOLDER):
-            os.makedirs(UPLOAD_FOLDER)
-        if allowed_file(f.filename):
-            f.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(f.filename)))
-            flash('File uploaded successfully')
-            return redirect(url_for('upload_file'))
-        flash('Not allowed extension, please choose *.zip file')
-        return redirect(url_for('upload_file'))
+@app.route('/download')
+def download_file():
+    return send_file(os.path.join(app.config['UPLOAD_FOLDER'], '/publish.zip'), as_attachment=True)
 
 
 @app.route('/api/test', methods=['POST'])
@@ -347,8 +337,9 @@ def translate():
 
 
 if __name__ == '__main__':
-    import ssl
-
-    context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-    context.load_cert_chain('avrl_cs_technion_ac_il.crt', 'AVRL_cs_technion_ac_il.key')
-    app.run(host="0.0.0.0", port=80, ssl_context=context, threaded=True, debug=True)
+    # import ssl
+    #
+    # context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+    # context.load_cert_chain('avrl_cs_technion_ac_il.crt', 'AVRL_cs_technion_ac_il.key')
+    # app.run(host="0.0.0.0", port=80, ssl_context=context, threaded=True, debug=True)
+    app.run(debug=True)

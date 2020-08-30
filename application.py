@@ -2,6 +2,9 @@ import os
 import json
 
 from timeit import default_timer as timer
+
+from werkzeug.utils import secure_filename
+
 from acronyms import find_acronyms
 from confused_word import get_confused_word
 from database.models import db
@@ -35,6 +38,19 @@ with app.app_context():
 @app.route('/index')
 def index():
     return render_template('index.html', title='EnglishTips')
+
+
+@app.route('/upload')
+def upload_file():
+    return render_template('upload.html')
+
+
+@app.route('/uploader', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        f = request.files['file']
+        f.save(secure_filename(f.filename))
+        return 'file uploaded successfully'
 
 
 @app.route('/api/test', methods=['POST'])

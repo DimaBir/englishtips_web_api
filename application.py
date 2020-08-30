@@ -83,7 +83,7 @@ def upload_file():
     return render_template('upload.html')
 
 
-@app.route('/download')
+@app.route('/download', methods=['GET'])
 def download_file():
     # TODO: Change to relative
     return send_file('C:/englishtips/englishtips_web_api/version/publish.zip', as_attachment=True)

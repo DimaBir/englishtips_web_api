@@ -55,7 +55,7 @@ def allowed_file(filename):
 
 @app.errorhandler(413)
 def request_entity_too_large(error):
-    return f"The file is too large. Max size: {MAX_UPLOAD_SIZE_MB} MB.", 413
+    return 'The file is too large.', 413
 
 
 @app.route('/upload', methods=['GET', 'POST'])

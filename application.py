@@ -22,9 +22,12 @@ from flask import Flask, render_template, request, jsonify, url_for
 
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
 SERVER_PATH = os.path.join(BASEDIR, 'db.sqlite')
-VERSION_FILE_PATH = os.path.join(os.path.realpath(__file__), '/englishtips/englishtips_web_api/version/')
+UPLOAD_FOLDER= os.path.join(os.path.realpath(__file__), '/englishtips/englishtips_web_api/version/')
+ALLOWED_EXTENSIONS = {'txt', 'zip'}
+
 app = Flask(__name__, template_folder='templates')
 
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + SERVER_PATH
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -46,14 +49,21 @@ def upload_file():
     return render_template('upload.html')
 
 
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
 @app.route('/uploader', methods=['GET', 'POST'])
 def uploader_file():
     if request.method == 'POST':
         f = request.files['file']
-        if not os.path.exists(VERSION_FILE_PATH):
-            os.makedirs(VERSION_FILE_PATH)
-        f.save(VERSION_FILE_PATH + secure_filename(f.filename))
-        return 'file uploaded successfully'
+        if not os.path.exists(UPLOAD_FOLDER):
+            os.makedirs(UPLOAD_FOLDER)
+        if allowed_file(f.filename):
+            f.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(f.filename)))
+            return 'File uploaded successfully'
+        return 'Not allowed extension, please choose *.zip file'
 
 
 @app.route('/api/test', methods=['POST'])

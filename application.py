@@ -85,7 +85,7 @@ def upload_file():
 
 @app.route('/download')
 def download_file():
-    return send_file(os.path.join(UPLOAD_FOLDER, '/publish.zip'), as_attachment=True)
+    return send_file('/version/publish.zip', as_attachment=True)
 
 
 @app.route('/api/test', methods=['POST'])

@@ -48,14 +48,39 @@ def index():
     return render_template('index.html', title='EnglishTips')
 
 
-@app.route('/upload')
-def upload_file():
-    return render_template('upload.html')
-
-
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+@app.route('/upload', methods=['GET', 'POST'])
+def upload_file():
+    form = UploadForm()
+
+    if form.validate_on_submit():
+        f = form.upload.data
+        filename = secure_filename(f.filename)
+        f.save(os.path.join(
+            app.instance_path, 'version', filename
+        ))
+        flash('File uploaded successfully')
+        return redirect(url_for('upload_file'))
+        # if request.method == 'POST':
+        #     f = request.files['file']
+        #     f = form.photo.data
+        #     if not os.path.exists(UPLOAD_FOLDER):
+        #         os.makedirs(UPLOAD_FOLDER)
+        #     if allowed_file(f.filename):
+        #         # f.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(f.filename)))
+        #         f.save(os.path.join(
+        #             app.instance_path, 'photos', f.filename
+        #         ))
+        #         flash('File uploaded successfully')
+        #     else:
+        #         flash('Not allowed extension, please choose *.zip file')
+        #     return redirect(url_for('upload_file'))
+
+    return render_template('upload.html', form=form)
 
 
 @app.route('/uploader', methods=['GET', 'POST'])

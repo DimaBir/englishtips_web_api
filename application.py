@@ -89,7 +89,7 @@ def upload_file():
 @app.route('/download', methods=['GET'])
 def download_file():
     # TODO: Change to relative
-    return send_from_directory(directory=UPLOAD_FOLDER, filename="EnglishTips_v_0.1.zip", mimetype='application/zip',
+    return send_from_directory(directory=UPLOAD_FOLDER, filename="EnglishTips_v_0.1.zip", mimetype="'application/zip'",
                                as_attachment=True)
 
 

@@ -13,6 +13,7 @@
         <!-- Fonts CSS-->
         <link rel="stylesheet" href="../static/css/heading.css">
         <link rel="stylesheet" href="../static/css/body.css">
+
     </head>
     <body id="page-top">
         <nav class="navbar navbar-expand-lg bg-secondary fixed-top" id="mainNav">
@@ -43,7 +44,7 @@
                 </div>
                 <!-- Masthead Subheading-->
                 <p class="pre-wrap masthead-subheading font-weight-light mb-0">Grammar tool for academic essay</p>
-                <button href="https://avrl.cs.technion.ac.il:80/download" class="download_btn" style="width:20%; min-width: 200px; margin-top: 30px"><i class="fa fa-download"></i> Download</button>
+                <button href="{{ url_for('download_file') }}" type="button" style="width:20%; min-width: 200px; margin-top: 30px">Download</button>
             </div>
         </header>
         <section class="page-section portfolio" id="portfolio">

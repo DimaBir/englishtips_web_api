@@ -31,7 +31,7 @@
                         <li class="nav-item mx-0 mx-lg-1"><a
                                 class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#contact">CONTACT</a>
                         </li>
-                        <li class="nav-item mx-0 mx-lg-1"><a
+                        <li class="nav-item mx-0 mx-lg-1" style="text-decoration-color: orangered"><a
                                 class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger"
                                 href="{{ url_for('download_file') }}">DOWNLOAD</a>
                         </li>
@@ -39,18 +39,6 @@
                 </div>
             </div>
         </nav>
-        {% with errors = get_flashed_messages(category_filter=["success"]) %}
-            {% if errors %}
-                {%- for message in errors %}
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <span>{{ message }}</span>
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                {% endfor -%}
-            {% endif %}
-        {% endwith %}
         <header class="masthead bg-primary text-white text-center">
             <div class="container d-flex align-items-center flex-column">
                 <!-- Masthead Avatar Image--><img class="masthead-avatar mb-5" src="../static/assets/img/avataaars.svg" alt="">

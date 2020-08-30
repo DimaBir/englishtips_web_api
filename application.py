@@ -53,6 +53,11 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
+@app.errorhandler(413)
+def request_entity_too_large(error):
+    return 'File Too Large', 413
+
+
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
@@ -69,8 +74,8 @@ def upload_file():
         if not allowed_file(file.filename):
             flash('File must be ZIP.', 'error')
             return redirect(request.url)
-        file.seek(0, 2)
-        file_size = file.tell()
+        # file.seek(0, 2)
+        # file_size = file.tell()
         # if file_size > MAX_UPLOAD_SIZE_MB * 1024 * 1024:
         #     flash(f'File size is too large! Max size is: {MAX_UPLOAD_SIZE_MB} MB', 'error')
         #     return redirect(request.url)

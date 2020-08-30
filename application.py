@@ -85,6 +85,7 @@ def upload_file():
 
 @app.route('/download')
 def download_file():
+    # TODO: Change to relative
     return send_file('C:/englishtips/englishtips_web_api/version/publish.zip', as_attachment=True)
 
 

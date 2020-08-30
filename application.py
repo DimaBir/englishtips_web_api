@@ -72,7 +72,7 @@ def upload_file():
         file.seek(0, 2)
         file_size = file.tell()
         if file_size > 1 * 1024 * 1024:
-            flash(f"File size must be at most {app.config['MAX_CONTENT_LENGTH']}", "error")
+            flash('File size too large!', 'error')
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)

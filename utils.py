@@ -1,5 +1,12 @@
 import re
 
+from flask_wtf import FlaskForm
+from wtforms import SubmitField
+
+
+class UploadForm(FlaskForm):
+    submit = SubmitField('Upload')
+
 
 def find_word_index(text, word, one_based=False):
     word = word.lower()

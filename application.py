@@ -68,12 +68,12 @@ def upload_file():
             flash('No selected file', 'warning')
             return redirect(request.url)
         if not allowed_file(file.filename):
-            flash('File must be ZIP.', 'warning')
+            flash('File must be ZIP.', 'error')
             return redirect(request.url)
         file.seek(0, 2)
         file_size = file.tell()
         if file_size > MAX_UPLOAD_SIZE_MB * 1024 * 1024:
-            flash(f'File size is too large! Max size is: <{MAX_UPLOAD_SIZE_MB} MB', 'error')
+            flash(f'File size is too large! Max size is: {MAX_UPLOAD_SIZE_MB} MB', 'error')
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)

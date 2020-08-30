@@ -22,7 +22,7 @@ from flask import Flask, render_template, request, jsonify, url_for
 
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
 SERVER_PATH = os.path.join(BASEDIR, 'db.sqlite')
-VERSION_FILE_PATH = os.path.join(os.path.realpath(__file__), '/version/')
+VERSION_FILE_PATH = os.path.join(os.path.realpath(__file__), '/englishtips/englishtips_web_api/version/')
 app = Flask(__name__, template_folder='templates')
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + SERVER_PATH

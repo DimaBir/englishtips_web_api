@@ -30,7 +30,7 @@ ALLOWED_EXTENSIONS = {'txt', 'zip'}
 app = Flask(__name__, template_folder='templates')
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 0.5 * 1024 * 1024
+app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + SERVER_PATH
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'ba86103dafb9ec379d26c7bd92206424'
@@ -55,16 +55,34 @@ def allowed_file(filename):
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
-    if request.method == 'POST':
-        f = request.files['file']
-        if not os.path.exists(UPLOAD_FOLDER):
-            os.makedirs(UPLOAD_FOLDER)
-        if allowed_file(f.filename):
-            f.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(f.filename)))
-            flash('File uploaded successfully')
-        else:
-            flash('Not allowed extension, please choose *.zip file')
+    # check if the post request has the file part
+    if 'file' not in request.files:
+        flash('No file part')
+        return redirect(request.url)
+    file = request.files['file']
+    # if user does not select file, browser also
+    # submit an empty part without filename
+    if file.filename == '':
+        flash('No selected file')
+        return redirect(request.url)
+    if not allowed_file(file.filename):
+        flash('Please provide only ZIP files.')
+        return redirect(request.url)
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        flash('File uploaded successfully')
         return redirect(url_for('upload_file'))
+    # if request.method == 'POST':
+    #     f = request.files['file']
+    #     if not os.path.exists(UPLOAD_FOLDER):
+    #         os.makedirs(UPLOAD_FOLDER)
+    #     if allowed_file(f.filename):
+    #         f.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(f.filename)))
+    #         flash('File uploaded successfully')
+    #     else:
+    #         flash('Not allowed extension, please choose *.zip file')
+    #     return redirect(url_for('upload_file'))
 
     return render_template('upload.html')
 

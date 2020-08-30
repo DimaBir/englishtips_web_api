@@ -23,7 +23,7 @@ from flask import Flask, render_template, request, jsonify, url_for, flash, redi
 
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
 SERVER_PATH = os.path.join(BASEDIR, 'db.sqlite')
-UPLOAD_FOLDER = os.path.join(os.path.abspath(os.path.dirname(__file__)), '/version/')
+UPLOAD_FOLDER = os.path.join(BASEDIR, '/version/')
 ALLOWED_EXTENSIONS = {'txt', 'zip'}
 
 app = Flask(__name__, template_folder='templates')

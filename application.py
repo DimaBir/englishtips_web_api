@@ -90,7 +90,7 @@ def upload_file():
 def download_file():
     # TODO: Change to relative
     flash('Thank you for downloading!', 'success')
-    return send_from_directory(directory=UPLOAD_FOLDER, filename="publish.zip")
+    return send_file(UPLOAD_FOLDER + 'publish.zip', as_attachment=True)
 
 
 @app.route('/api/verbs', methods=['POST'])

@@ -30,7 +30,7 @@ app = Flask(__name__, template_folder='templates')
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 MAX_UPLOAD_SIZE_MB = 1
-app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024
+# app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + SERVER_PATH
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'ba86103dafb9ec379d26c7bd92206424'
@@ -74,11 +74,11 @@ def upload_file():
         if not allowed_file(file.filename):
             flash('File must be ZIP.', 'error')
             return redirect(request.url)
-        # file.seek(0, 2)
-        # file_size = file.tell()
-        # if file_size > MAX_UPLOAD_SIZE_MB * 1024 * 1024:
-        #     flash(f'File size is too large! Max size is: {MAX_UPLOAD_SIZE_MB} MB', 'error')
-        #     return redirect(request.url)
+        request.files['file'].save('/tmp/foo')
+        file_size = os.stat('/tmp/foo').st_size
+        if file_size > MAX_UPLOAD_SIZE_MB * 1024 * 1024:
+            flash(f'File size is too large! Max size is: {MAX_UPLOAD_SIZE_MB} MB', 'error')
+            return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))

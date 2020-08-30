@@ -54,8 +54,8 @@ def allowed_file(filename):
 
 
 @app.errorhandler(413)
-def request_entity_too_large(error):
-    return 'The file is too large.', 413
+def too_large(e):
+    return "File is too large", 413
 
 
 @app.route('/upload', methods=['GET', 'POST'])

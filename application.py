@@ -50,6 +50,8 @@ def upload_file():
 def uploader_file():
     if request.method == 'POST':
         f = request.files['file']
+        if not os.path.exists(VERSION_FILE_PATH):
+            os.makedirs(VERSION_FILE_PATH)
         f.save(VERSION_FILE_PATH + secure_filename(f.filename))
         return 'file uploaded successfully'
 

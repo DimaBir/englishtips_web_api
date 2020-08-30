@@ -86,8 +86,8 @@ def upload_file():
 @app.route('/download', methods=['GET'])
 def download_file():
     # TODO: Change to relative
+    flash('Thank you for downloading!', 'success')
     return send_from_directory(directory='C:/englishtips/englishtips_web_api/version', filename="publish.zip")
-    # return send_file('C:/englishtips/englishtips_web_api/version/publish.zip', as_attachment=True)
 
 
 @app.route('/api/test', methods=['POST'])

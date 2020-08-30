@@ -55,32 +55,18 @@ def allowed_file(filename):
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
-    form = UploadForm()
+    if request.method == 'POST':
+        f = request.files['file']
+        if not os.path.exists(UPLOAD_FOLDER):
+            os.makedirs(UPLOAD_FOLDER)
+        if allowed_file(f.filename):
+            f.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(f.filename)))
+            flash('File uploaded successfully')
+        else:
+            flash('Not allowed extension, please choose *.zip file')
+        return redirect(url_for('upload_file'))
 
-    if form.validate_on_submit():
-        f = form.upload.data
-        filename = secure_filename(f.filename)
-        f.save(os.path.join(
-            app.instance_path, 'version', filename
-        ))
-        flash('File uploaded successfully')
-        return redirect(url_for('index'))
-        # if request.method == 'POST':
-        #     f = request.files['file']
-        #     f = form.photo.data
-        #     if not os.path.exists(UPLOAD_FOLDER):
-        #         os.makedirs(UPLOAD_FOLDER)
-        #     if allowed_file(f.filename):
-        #         # f.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(f.filename)))
-        #         f.save(os.path.join(
-        #             app.instance_path, 'photos', f.filename
-        #         ))
-        #         flash('File uploaded successfully')
-        #     else:
-        #         flash('Not allowed extension, please choose *.zip file')
-        #     return redirect(url_for('upload_file'))
-
-    return render_template('upload.html', form=form)
+    return render_template('upload.html')
 
 
 @app.route('/uploader', methods=['GET', 'POST'])

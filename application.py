@@ -46,7 +46,7 @@ def upload_file():
 
 
 @app.route('/uploader', methods=['GET', 'POST'])
-def upload_file():
+def uploader_file():
     if request.method == 'POST':
         f = request.files['file']
         f.save(secure_filename(f.filename))

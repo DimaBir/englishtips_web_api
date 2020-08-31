@@ -1,4 +1,4 @@
-from database.utils import get_item
+from database.utils import get_confused_word_item
 from database.models import ConfusedWord
 
 
@@ -8,7 +8,7 @@ def get_confused_word(word: str) -> ConfusedWord:
     :param word:
     :return:
     """
-    result = get_item(word)
+    result = get_confused_word_item(word)
     return result
 
 

@@ -321,6 +321,33 @@ def confused_word():
         return str("Error: " + str(e))
 
 
+@app.route('/api/sentence_structure', methods=['POST'])
+def confused_word():
+    try:
+        start = timer()
+        content = request.get_json()
+        if len(content['word'].split()) != 1:
+            return json.dumps({
+                "result": None,
+                "ServerExecutionTime": timer() - start,
+                "Error": "Error: Please, choose one word and try again."
+            })
+        content['word'] = content['word'].strip()
+        print(content)
+        confused_word = get_confused_word(content['word'])
+
+        result = {
+            "result": None if confused_word is None else confused_word.note,
+            "ServerExecutionTime": timer() - start,
+            "Error": None if confused_word is not None else f"Error: The {content['word']} "
+                                                            f"is not in the sentence structure list"
+        }
+
+        return json.dumps(result)
+    except Exception as e:
+        return str("Error: " + str(e))
+
+
 @app.route('/api/translate', methods=['POST'])
 def translate():
     try:

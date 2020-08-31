@@ -1,20 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>English Tips</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', 'DataTables/datatables.min.css') }}"/>
-
-    <script type="text/javascript" src="{{ url_for('static', 'DataTables/datatables.min.js') }}"></script>
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="navbar-nav">
-            <a class="nav-item nav-link" href="{{ url_for('index') }}">Home</a>
-            <a class="nav-item nav-link" href="{{ url_for('admin.add') }}">Add word</a>
-            <a class="nav-item nav-link" href="{{ url_for('admin.list') }}">Servers content</a>
-        </div>
-    </nav>
+{% extends "layout.html" %}
+{% block content %}
     <div class="container">
         {% with errors = get_flashed_messages(category_filter=["success"]) %}
             {% if errors %}
@@ -71,5 +56,4 @@
             });
         </script>
     </div>
-</body>
-</html>
+{% endblock %}

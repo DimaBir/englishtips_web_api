@@ -91,7 +91,7 @@ def download_file():
     # TODO: Change to relative
     # return send_from_directory(directory=UPLOAD_FOLDER, filename="EnglishTips_v_0.1.zip", mimetype="'application/zip'",
     #                            as_attachment=True)
-    return send_file(os.path.join(UPLOAD_FOLDER, "publish.zip"),
+    return send_file(os.path.join(UPLOAD_FOLDER, "publish.zip"), as_attachment=True,
                      attachment_filename="EnglishTips_v_0.1.zip")
 
 

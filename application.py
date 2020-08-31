@@ -7,9 +7,11 @@ from flask_migrate import Migrate
 from werkzeug.utils import secure_filename
 
 from acronyms import find_acronyms
+from asl import avg_sentence_len
 from confused_word import get_confused_word
 from database.models import db
 from database.setupdatabase import fill_database
+from get_sentence_structure import get_sentence_structure
 from hypernyms import find_hypernyms
 from hyponyms import find_hyponyms
 from synonym import find_synonyms
@@ -322,7 +324,7 @@ def confused_word():
 
 
 @app.route('/api/sentence_structure', methods=['POST'])
-def confused_word():
+def sentence_structure():
     try:
         start = timer()
         content = request.get_json()
@@ -334,13 +336,37 @@ def confused_word():
             })
         content['word'] = content['word'].strip()
         print(content)
-        confused_word = get_confused_word(content['word'])
+        sentence_structure = get_sentence_structure(content['word'])
 
         result = {
-            "result": None if confused_word is None else confused_word.note,
+            "result": None if sentence_structure is None else sentence_structure.structure,
             "ServerExecutionTime": timer() - start,
-            "Error": None if confused_word is not None else f"Error: The {content['word']} "
+            "Error": None if sentence_structure is not None else f"Error: The {content['word']} "
                                                             f"is not in the sentence structure list"
+        }
+
+        return json.dumps(result)
+    except Exception as e:
+        return str("Error: " + str(e))
+
+
+@app.route('/api/asl', methods=['POST'])
+def avg_sent_len():
+    try:
+        start = timer()
+        content = request.get_json()
+        if len(content['text'].split()) < 1:
+            return json.dumps({
+                "result": None,
+                "ServerExecutionTime": timer() - start,
+                "Error": "Error: Please, choose at least one word and try again."
+            })
+        asl = avg_sentence_len(content['text'])
+
+        result = {
+            "result": None if asl is None else asl,
+            "ServerExecutionTime": timer() - start,
+            "Error": None if asl is not None else "Error: There was some error"
         }
 
         return json.dumps(result)

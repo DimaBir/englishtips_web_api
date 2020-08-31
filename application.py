@@ -3,11 +3,13 @@ import json
 
 from timeit import default_timer as timer
 
+from flask_migrate import Migrate
 from werkzeug.utils import secure_filename
 
 from acronyms import find_acronyms
 from confused_word import get_confused_word
 from database.models import db
+from database.setupdatabase import fill_database
 from hypernyms import find_hypernyms
 from hyponyms import find_hyponyms
 from synonym import find_synonyms
@@ -40,6 +42,11 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
     # fill_database()
+
+Migrate(app, db)
+
+from project.admin.views import confused_word_blueprints
+app.register_blueprint(confused_word_blueprints, url_prefix='/admin')
 
 
 @app.route('/')
@@ -334,9 +341,9 @@ def translate():
 
 
 if __name__ == '__main__':
-    import ssl
-
-    context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-    context.load_cert_chain('avrl_cs_technion_ac_il.crt', 'AVRL_cs_technion_ac_il.key')
-    app.run(host="0.0.0.0", port=80, ssl_context=context, threaded=True, debug=False)
-    # app.run(debug=True)
+    # import ssl
+    #
+    # context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+    # context.load_cert_chain('avrl_cs_technion_ac_il.crt', 'AVRL_cs_technion_ac_il.key')
+    # app.run(host="0.0.0.0", port=80, ssl_context=context, threaded=True, debug=False)
+    app.run(debug=True)

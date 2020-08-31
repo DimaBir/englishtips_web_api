@@ -15,7 +15,7 @@ class ConfusedWord(db.Model):
         self.note = note
 
     def __repr__(self):
-        return f"Word: {self.word};  Note: {self.note}"
+        return self.word, self.note
 
 
 if __name__ == '__main__':

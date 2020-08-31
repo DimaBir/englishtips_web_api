@@ -50,9 +50,8 @@
             {% endfor %}
             </tbody>
         </table>
-        <script type="text/javascript" src="~/Scripts/jquery.js"></script>
-        <script type="text/javascript" src="~/Scripts/data-table/jquery.dataTables.js"></script>
         <script>
+            $.noConflict();
             $(document).ready(function () {
                 $('#confusedWordsTable').dataTable();
             });

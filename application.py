@@ -150,7 +150,6 @@ def uncountable():
         content = request.get_json()
         print(content)
         result = find_uncountable_nouns(content['text'])
-
         return json.dumps(result)
     except Exception as e:
         return str("Error: " + str(e))

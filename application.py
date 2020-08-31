@@ -43,7 +43,7 @@ with app.app_context():
     db.create_all()
     # fill_database()
 
-Migrate(app, db)
+# Migrate(app, db)
 
 from project.admin.views import confused_word_blueprints
 app.register_blueprint(confused_word_blueprints, url_prefix='/admin')

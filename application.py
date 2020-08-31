@@ -43,7 +43,7 @@ with app.app_context():
     db.create_all()
     # fill_database()
 
-# Migrate(app, db)
+Migrate(app, db)
 
 from project.admin.views import confused_word_blueprints
 app.register_blueprint(confused_word_blueprints, url_prefix='/admin')
@@ -79,11 +79,6 @@ def upload_file():
         if not allowed_file(file.filename):
             flash('File must be ZIP.', 'error')
             return redirect(request.url)
-        # request.files['file'].save('/tmp/foo')
-        # file_size = os.stat('/tmp/foo').st_size
-        # if file_size > MAX_UPLOAD_SIZE_MB * 1024 * 1024:
-        #     flash(f'File size is too large! Max size is: {MAX_UPLOAD_SIZE_MB} MB', 'error')
-        #     return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(UPLOAD_FOLDER, filename))
@@ -96,8 +91,6 @@ def upload_file():
 @app.route('/download', methods=['GET'])
 def download_file():
     # TODO: Change to relative
-    # return send_from_directory(directory=UPLOAD_FOLDER, filename="EnglishTips_v_0.1.zip", mimetype="'application/zip'",
-    #                            as_attachment=True)
     name = "EnglishTips_v_0.1.zip"
     response = send_file(os.path.join(UPLOAD_FOLDER, "publish.zip"), as_attachment=True, mimetype="application/zip",
                          attachment_filename=name)

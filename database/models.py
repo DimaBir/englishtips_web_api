@@ -18,5 +18,20 @@ class ConfusedWord(db.Model):
         return self.word, self.note
 
 
+class SentenceStructure(db.Model):
+    # MANUAL TABLE NAME CHOICE
+    __tablename__ = 'sentence_structure'
+
+    word = db.Column(db.Text, primary_key=True)
+    structure = db.Column(db.Text)
+
+    def __init__(self, word, structure):
+        self.word = word
+        self.structure = structure
+
+    def __repr__(self):
+        return self.word, self.structure
+
+
 if __name__ == '__main__':
     pass

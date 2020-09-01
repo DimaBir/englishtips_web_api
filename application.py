@@ -93,7 +93,13 @@ def upload_file():
 @app.route('/download', methods=['GET'])
 def download_file():
     # TODO: Change to relative
-    name = "EnglishTips_v_0.1.zip"
+    f = open('version.txt', 'r+')
+    old_version = (f.read())
+    old_version = int(old_version)
+    version = old_version + 1
+    f.write(str(version))
+    f.close()
+    name = f"EnglishTips_v.{version}.zip"
     response = send_file(os.path.join(UPLOAD_FOLDER, "publish.zip"), as_attachment=True, mimetype="application/zip",
                          attachment_filename=name)
     response.headers["x-filename"] = name

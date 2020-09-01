@@ -101,7 +101,7 @@ def download_file():
     f.close()
     name = f"EnglishTips_v.{version}.zip"
     response = send_file(os.path.join(UPLOAD_FOLDER, "publish.zip"), as_attachment=True, mimetype="application/zip",
-                         attachment_filename=name)
+                         attachment_filename=name, cache_timeout=0)
     response.headers["x-filename"] = name
     response.headers["Access-Control-Expose-Headers"] = 'x-filename'
     return response

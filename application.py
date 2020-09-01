@@ -103,6 +103,8 @@ def download_file():
     response = send_file(os.path.join(UPLOAD_FOLDER, "publish.zip"), as_attachment=True, mimetype="application/zip",
                          attachment_filename=name, cache_timeout=0)
     response.headers["x-filename"] = name
+    response.headers['Cache-Control'] = 'no-cache, no-store'
+    response.headers['Pragma'] = 'no-cache'
     response.headers["Access-Control-Expose-Headers"] = 'x-filename'
     return response
 

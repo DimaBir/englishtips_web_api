@@ -1,13 +1,17 @@
-{% extends "layout.html" %}
+{% extends "base.html" %}
 {% block content %}
-<div class="jumbotron">
-    <h1>Adding new confused word to database</h1>
-    <p>Please use the form below, to add word and definition to database</p>
-    <form method="post">
-        {{ form.hidden_tag() }}
-        {{ form.word.label }} {{ form.word() }}
-        {{ form.definition.label }} {{ form.definition() }}
-        {{ form.submit() }}
-    </form>
-</div>
+    {% if current_user.is_authenticated %}
+    <div class="jumbotron">
+        <h1>Adding new confused word to database</h1>
+        <p>Please use the form below, to add word and definition to database</p>
+        <form method="post">
+            {{ form.hidden_tag() }}
+            {{ form.word.label }} {{ form.word() }}
+            {{ form.definition.label }} {{ form.definition() }}
+            {{ form.submit() }}
+        </form>
+    </div>
+    {% else %}
+    <p>Please login or register</p>
+    {% endif %}
 {% endblock %}

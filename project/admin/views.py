@@ -1,12 +1,65 @@
-from flask import Blueprint, render_template, redirect, url_for, flash
+from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask_login import login_required, logout_user, login_user
+
 from project import db
-from database.models import ConfusedWord
-from project.admin.forms import AddForm, DelForm
+from database.models import ConfusedWord, User
+from project.admin.forms import AddForm, DelForm, LoginForm, RegistrationForm
 
 confused_word_blueprints = Blueprint('admin', __name__, template_folder='templates/admin')
 
 
+@confused_word_blueprints.route('/welcome')
+@login_required
+def welcome_user():
+    return render_template('welcome_user.html')
+
+
+@confused_word_blueprints.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash("You logged out!")
+    return redirect(url_for('index'))
+
+
+@confused_word_blueprints.route('/login', methods=['GET', 'POST'])
+def login():
+
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+
+        if user.check_password(form.password.data) and user is not None:
+            login_user(user)
+            flash('Logged in successfully!')
+
+            next = request.args.get('next')  # saves previous page user has attempted to login and
+                                             # after login redirects there
+
+            if next == None or not next[0]=='/':
+                next = url_for('index')
+
+            return redirect(next)
+    return render_template('login.html', form=form)
+
+
+@confused_word_blueprints.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegistrationForm()
+
+    if form.validate_on_submit():
+        user = User(email=form.email.data, username=form.username.data, password=form.password.data)
+
+        db.session.add(user)
+        db.session.commit()
+        flash('Thanks for the registration')
+        return redirect(url_for('index'))
+    return render_template('register.html', form=form)
+
+
 @confused_word_blueprints.route('/add', methods=['GET', 'POST'])
+@login_required
 def add():
     form = AddForm()
     if form.validate_on_submit():
@@ -24,6 +77,7 @@ def add():
 
 
 @confused_word_blueprints.route('/list')
+@login_required
 def list():
     confused_words = ConfusedWord.query.all()
     result = []
@@ -33,6 +87,7 @@ def list():
 
 
 @confused_word_blueprints.route('/delete/<word_id>', methods=['GET', 'POST'])
+@login_required
 def delete(word_id):
     confused_word = ConfusedWord.query.get(word_id)
 

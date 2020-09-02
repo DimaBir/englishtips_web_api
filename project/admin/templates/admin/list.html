@@ -1,5 +1,6 @@
-{% extends "layout.html" %}
+{% extends "base.html" %}
 {% block content %}
+    {% if current_user.is_authenticated %}
     <div class="container">
         {% with errors = get_flashed_messages(category_filter=["success"]) %}
             {% if errors %}
@@ -56,4 +57,7 @@
             });
         </script>
     </div>
+    {% else %}
+        <p>Please login or register</p>
+    {% endif %}
 {% endblock %}

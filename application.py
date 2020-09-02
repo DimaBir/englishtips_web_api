@@ -9,11 +9,12 @@ from werkzeug.utils import secure_filename
 from acronyms import find_acronyms
 from asl import avg_sentence_len
 from confused_word import get_confused_word
-from database.models import db
+from database.models import db, User, login_manager
 from database.setupdatabase import fill_database
 from get_sentence_structure import get_sentence_structure
 from hypernyms import find_hypernyms
 from hyponyms import find_hyponyms
+from project.admin.forms import RegistrationForm, LoginForm
 from synonym import find_synonyms
 from uncountable_nouns import find_uncountable_nouns
 from utils import UploadForm
@@ -24,6 +25,7 @@ from nouns import find_nouns, find_noun_compound
 from google_translate import google_translate
 from flask import Flask, render_template, request, jsonify, url_for, flash, redirect, send_from_directory, abort, \
     send_file
+from flask_login import login_user, logout_user, login_required
 
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
 SERVER_PATH = os.path.join(BASEDIR, 'db.sqlite')
@@ -41,11 +43,15 @@ app.config['SECRET_KEY'] = 'ba86103dafb9ec379d26c7bd92206424'
 
 db.init_app(app)
 
+#
 with app.app_context():
-    db.create_all()
-    # fill_database()
+#     db.create_all()
+      fill_database()
 
 Migrate(app, db)
+
+login_manager.init_app(app)
+login_manager.login_view = 'login'
 
 from project.admin.views import confused_word_blueprints
 app.register_blueprint(confused_word_blueprints, url_prefix='/admin')
@@ -68,6 +74,7 @@ def request_entity_too_large(error):
 
 
 @app.route('/upload', methods=['GET', 'POST'])
+@login_required
 def upload_file():
     if request.method == 'POST':
         # check if the post request has the file part
@@ -84,6 +91,13 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(UPLOAD_FOLDER, filename))
+            f = open('version.txt', 'r+')
+            old_version = (f.read())
+            old_version = int(old_version)
+            version = old_version + 1
+            f.truncate(0)  # need '0' when using r+
+            f.write(str(version))
+            f.close()
             flash(f'{file.filename} uploaded successfully', 'success')
             return redirect(url_for('upload_file'))
 
@@ -93,11 +107,8 @@ def upload_file():
 @app.route('/download', methods=['GET'])
 def download_file():
     # TODO: Change to relative
-    f = open('version.txt', 'r+')
-    old_version = (f.read())
-    old_version = int(old_version)
-    version = old_version + 1
-    f.write(str(version))
+    f = open('version.txt', 'r')
+    version = (f.read())
     f.close()
     name = f"EnglishTips_v.{version}.zip"
     response = send_file(os.path.join(UPLOAD_FOLDER, "publish.zip"), as_attachment=True, mimetype="application/zip",
@@ -395,9 +406,9 @@ def translate():
 
 
 if __name__ == '__main__':
-    import ssl
-
-    context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-    context.load_cert_chain('avrl_cs_technion_ac_il.crt', 'AVRL_cs_technion_ac_il.key')
-    app.run(host="0.0.0.0", port=80, ssl_context=context, threaded=True, debug=False)
-    # app.run(debug=True)
+    # import ssl
+    #
+    # context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+    # context.load_cert_chain('avrl_cs_technion_ac_il.crt', 'AVRL_cs_technion_ac_il.key')
+    # app.run(host="0.0.0.0", port=80, ssl_context=context, threaded=True, debug=False)
+    app.run(debug=True)

@@ -33,7 +33,7 @@ ALLOWED_EXTENSIONS = {'txt', 'zip'}
 app = Flask(__name__, template_folder='templates')
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-MAX_UPLOAD_SIZE_MB = 1
+MAX_UPLOAD_SIZE_MB = 2.5
 app.config['MAX_CONTENT_LENGTH'] = MAX_UPLOAD_SIZE_MB * 1024 * 1024
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + SERVER_PATH
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

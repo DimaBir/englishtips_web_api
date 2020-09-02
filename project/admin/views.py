@@ -44,18 +44,18 @@ def login():
     return render_template('login.html', form=form)
 
 
-@confused_word_blueprints.route('/register', methods=['GET', 'POST'])
-def register():
-    form = RegistrationForm()
-
-    if form.validate_on_submit():
-        user = User(email=form.email.data, username=form.username.data, password=form.password.data)
-
-        db.session.add(user)
-        db.session.commit()
-        flash('Thanks for the registration')
-        return redirect(url_for('index'))
-    return render_template('register.html', form=form)
+# @confused_word_blueprints.route('/register', methods=['GET', 'POST'])
+# def register():
+#     form = RegistrationForm()
+#
+#     if form.validate_on_submit():
+#         user = User(email=form.email.data, username=form.username.data, password=form.password.data)
+#
+#         db.session.add(user)
+#         db.session.commit()
+#         flash('Thanks for the registration')
+#         return redirect(url_for('index'))
+#     return render_template('register.html', form=form)
 
 
 @confused_word_blueprints.route('/add', methods=['GET', 'POST'])

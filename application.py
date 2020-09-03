@@ -91,13 +91,13 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(UPLOAD_FOLDER, filename))
-            f = open('version.txt', 'r+')
-            old_version = (f.read())
-            old_version = int(old_version)
-            version = old_version + 1
-            f.truncate(0)  # need '0' when using r+
-            f.write(str(version))
-            f.close()
+            # f = open('version.txt', 'r+')
+            # old_version = (f.read())
+            # old_version = int(old_version)
+            # version = old_version + 1
+            # f.truncate(0)  # need '0' when using r+
+            # f.write(str(version))
+            # f.close()
             flash(f'{file.filename} uploaded successfully', 'success')
             return redirect(url_for('upload_file'))
 

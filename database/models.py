@@ -37,6 +37,21 @@ class SentenceStructure(db.Model):
         return self.word, self.structure
 
 
+class UsefulPhrases(db.Model):
+    # MANUAL TABLE NAME CHOICE
+    __tablename__ = 'useful_phrases'
+
+    word = db.Column(db.Text, primary_key=True)
+    structure = db.Column(db.Text)
+
+    def __init__(self, phrase, example):
+        self.phrase = phrase
+        self.example = example
+
+    def __repr__(self):
+        return self.phrase, self.example
+
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(user_id)

@@ -1,6 +1,7 @@
 import os
 import json
 
+from nltk.corpus import wordnet
 from timeit import default_timer as timer
 
 from flask_migrate import Migrate
@@ -420,10 +421,37 @@ def translate():
         return str("Error: " + str(e))
 
 
-if __name__ == '__main__':
-    import ssl
+# WordNet
+@app.route('/api/dictionary', methods=['POST'])
+def dictionary():
+    try:
+        start = timer()
+        content = request.get_json()
+        if len(content['word'].split()) != 1:
+            return json.dumps({
+                "result": None,
+                "ServerExecutionTime": timer() - start,
+                "Error": "Error: Please, choose one word and try again."
+            })
+        content['word'] = content['word'].strip()
+        syns = wordnet.synsets(content['word'])
+        response = syns[0].definition()
 
-    context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-    context.load_cert_chain('avrl_cs_technion_ac_il.crt', 'AVRL_cs_technion_ac_il.key')
-    app.run(host="0.0.0.0", port=80, ssl_context=context, threaded=True, debug=False)
-    # app.run(debug=True)
+        result = {
+            "result": None if response is None else response,
+            "ServerExecutionTime": timer() - start,
+            "Error": None if response is not None else "Error: There was some error"
+        }
+
+        return json.dumps(result)
+    except Exception as e:
+        return str("Error: " + str(e))
+
+
+if __name__ == '__main__':
+    # import ssl
+    #
+    # context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+    # context.load_cert_chain('avrl_cs_technion_ac_il.crt', 'AVRL_cs_technion_ac_il.key')
+    # app.run(host="0.0.0.0", port=80, ssl_context=context, threaded=True, debug=False)
+    app.run(debug=True)

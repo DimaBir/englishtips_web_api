@@ -17,6 +17,7 @@ from hyponyms import find_hyponyms
 from project.admin.forms import RegistrationForm, LoginForm
 from synonym import find_synonyms
 from uncountable_nouns import find_uncountable_nouns
+from useful_phrases import get_useful_phrase
 from utils import UploadForm
 from wordiness import find_wordiness
 from toptenwords import find_top_ten_words
@@ -393,6 +394,15 @@ def avg_sent_len():
         return str("Error: " + str(e))
 
 
+@app.route('/api/useful', methods=['POST'])
+def useful_phrases():
+    try:
+        useful_phrases_dictionary = get_useful_phrase()
+        return json.dumps(useful_phrases_dictionary)
+    except Exception as e:
+        return str("Error: " + str(e))
+
+
 @app.route('/api/translate', methods=['POST'])
 def translate():
     try:
@@ -406,9 +416,9 @@ def translate():
 
 
 if __name__ == '__main__':
-    import ssl
-
-    context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-    context.load_cert_chain('avrl_cs_technion_ac_il.crt', 'AVRL_cs_technion_ac_il.key')
-    app.run(host="0.0.0.0", port=80, ssl_context=context, threaded=True, debug=False)
-    # app.run(debug=True)
+    # import ssl
+    #
+    # context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+    # context.load_cert_chain('avrl_cs_technion_ac_il.crt', 'AVRL_cs_technion_ac_il.key')
+    # app.run(host="0.0.0.0", port=80, ssl_context=context, threaded=True, debug=False)
+    app.run(debug=True)

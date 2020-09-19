@@ -16,6 +16,7 @@ from get_sentence_structure import get_sentence_structure
 from hypernyms import find_hypernyms
 from hyponyms import find_hyponyms
 from project.admin.forms import RegistrationForm, LoginForm
+from summarizer import text_summarization
 from synonym import find_synonyms
 from uncountable_nouns import find_uncountable_nouns
 from useful_phrases import get_useful_phrase
@@ -443,6 +444,23 @@ def dictionary():
             "Error": None if response is not None else "Error: There was some error"
         }
 
+        return json.dumps(result)
+    except Exception as e:
+        return str("Error: " + str(e))
+
+
+@app.route('/api/summ', methods=['POST'])
+def text_summary():
+    try:
+        start = timer()
+        content = request.get_json()
+        print(content)
+        result = text_summarization(content['text'])
+
+        result = {
+            "result": result,
+            "ServerExecutionTime": timer() - start
+        }
         return json.dumps(result)
     except Exception as e:
         return str("Error: " + str(e))

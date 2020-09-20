@@ -1,4 +1,4 @@
-from functions.utils import find_first_char_index
+from app.utils import find_first_char_index
 
 
 def find_uncountable_nouns(text=None):

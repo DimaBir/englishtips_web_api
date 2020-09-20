@@ -12,7 +12,7 @@ def find_wordiness(text):
     original_text = text
     text = text.split()
 
-    path = "../../wordiness/"
+    path = "../wordiness/"
     files = [f for f in listdir(path) if isfile(join(path, f))]
 
     for f in files:

@@ -7,22 +7,22 @@ from timeit import default_timer as timer
 from flask_migrate import Migrate
 from werkzeug.utils import secure_filename
 
-from logic.coloring.acronyms import find_acronyms
-from logic.analytics.asl import avg_sentence_len
-from logic.tips.confused_word import get_confused_word
+from functions.coloring.acronyms import find_acronyms
+from functions.analytics.asl import avg_sentence_len
+from functions.tips.confused_word import get_confused_word
 from database.models import db, login_manager
-from logic.tips.get_sentence_structure import get_sentence_structure
-from logic.coloring.hypernyms import find_hypernyms
-from logic.coloring.hyponyms import find_hyponyms
-from logic.summarizer import text_summarization
-from logic.coloring.synonym import find_synonyms
-from logic.coloring.uncountable_nouns import find_uncountable_nouns
-from logic.tips.useful_phrases import get_useful_phrase
-from logic.coloring.wordiness import find_wordiness
-from logic.analytics.toptenwords import find_top_ten_words
-from logic.coloring.verbs import find_verbs, find_verbs_per_char
-from logic.coloring.nouns import find_noun_compound
-from logic.google_translate import google_translate
+from functions.tips.get_sentence_structure import get_sentence_structure
+from functions.coloring.hypernyms import find_hypernyms
+from functions.coloring.hyponyms import find_hyponyms
+from functions.summarizer import text_summarization
+from functions.coloring.synonym import find_synonyms
+from functions.coloring.uncountable_nouns import find_uncountable_nouns
+from functions.tips.useful_phrases import get_useful_phrase
+from functions.coloring.wordiness import find_wordiness
+from functions.analytics.toptenwords import find_top_ten_words
+from functions.coloring.verbs import find_verbs, find_verbs_per_char
+from functions.coloring.nouns import find_noun_compound
+from functions.google_translate import google_translate
 from flask import Flask, render_template, request, url_for, flash, redirect, send_file
 from flask_login import login_required
 

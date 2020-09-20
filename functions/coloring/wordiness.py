@@ -1,7 +1,7 @@
 from os import listdir
 from os.path import isfile, join
 
-from utils import find_first_char_index
+from functions.utils import find_first_char_index
 
 
 def find_wordiness(text):
@@ -12,7 +12,7 @@ def find_wordiness(text):
     original_text = text
     text = text.split()
 
-    path = "wordiness/"
+    path = "../../wordiness/"
     files = [f for f in listdir(path) if isfile(join(path, f))]
 
     for f in files:

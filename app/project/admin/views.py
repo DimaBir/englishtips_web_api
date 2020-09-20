@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_required, logout_user, login_user
 
-from project import db
+from app.project import db
 from database.models import ConfusedWord, User
-from project.admin.forms import AddForm, DelForm, LoginForm, RegistrationForm
+from app.project.admin.forms import AddForm, LoginForm
 
 confused_word_blueprints = Blueprint('admin', __name__, template_folder='templates/admin')
 

@@ -8,7 +8,7 @@ mail_content = "REBOOT at: " + dt_string
 
 #The mail addresses and password
 sender_address = 'englishtips.server@gmail.com'
-sender_pass = 'itsang86'
+sender_pass = "W$^SS>/A^7].'vb-"
 receiver_address = 'dvlasenko86@gmail.com'
 
 #Setup the MIME

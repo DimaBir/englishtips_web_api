@@ -4,7 +4,7 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 
-from utils import find_first_char_index
+from functions.utils import find_first_char_index
 
 nltk.download('stopwords')
 

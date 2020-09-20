@@ -20,5 +20,5 @@ app.config['SECRET_KEY'] = 'ba86103dafb9ec379d26c7bd92206424'
 db = SQLAlchemy(app)
 Migrate(app, db)
 
-from project.admin.views import confused_word_blueprints
+from app.project.admin.views import confused_word_blueprints
 app.register_blueprint(confused_word_blueprints, url_prefix='/admin')

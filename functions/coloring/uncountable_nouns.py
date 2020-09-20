@@ -1,4 +1,4 @@
-from utils import find_first_char_index
+from functions.utils import find_first_char_index
 
 
 def find_uncountable_nouns(text=None):
@@ -8,7 +8,7 @@ def find_uncountable_nouns(text=None):
     text = text.split()
 
     # Creates uncountable nouns dictionary
-    with open('uncountable_nouns.txt') as file:
+    with open('../uncountable_nouns.txt') as file:
         for line in file:
             if len(line.strip()) == 0:
                 continue

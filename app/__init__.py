@@ -7,28 +7,24 @@ from timeit import default_timer as timer
 from flask_migrate import Migrate
 from werkzeug.utils import secure_filename
 
-from acronyms import find_acronyms
-from asl import avg_sentence_len
-from confused_word import get_confused_word
-from database.models import db, User, login_manager
-from database.setupdatabase import fill_database
-from get_sentence_structure import get_sentence_structure
-from hypernyms import find_hypernyms
-from hyponyms import find_hyponyms
-from project.admin.forms import RegistrationForm, LoginForm
-from summarizer import text_summarization
-from synonym import find_synonyms
-from uncountable_nouns import find_uncountable_nouns
-from useful_phrases import get_useful_phrase
-from utils import UploadForm
-from wordiness import find_wordiness
-from toptenwords import find_top_ten_words
-from verbs import find_verbs, find_verbs_per_char
-from nouns import find_nouns, find_noun_compound
-from google_translate import google_translate
-from flask import Flask, render_template, request, jsonify, url_for, flash, redirect, send_from_directory, abort, \
-    send_file
-from flask_login import login_user, logout_user, login_required
+from functions.coloring.acronyms import find_acronyms
+from functions.analytics.asl import avg_sentence_len
+from functions.tips.confused_word import get_confused_word
+from database.models import db, login_manager
+from functions.tips.get_sentence_structure import get_sentence_structure
+from functions.coloring.hypernyms import find_hypernyms
+from functions.coloring.hyponyms import find_hyponyms
+from functions.summarizer import text_summarization
+from functions.coloring.synonym import find_synonyms
+from functions.coloring.uncountable_nouns import find_uncountable_nouns
+from functions.tips.useful_phrases import get_useful_phrase
+from functions.coloring.wordiness import find_wordiness
+from functions.analytics.toptenwords import find_top_ten_words
+from functions.coloring.verbs import find_verbs, find_verbs_per_char
+from functions.coloring.nouns import find_noun_compound
+from functions.google_translate import google_translate
+from flask import Flask, render_template, request, url_for, flash, redirect, send_file
+from flask_login import login_required
 
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
 SERVER_PATH = os.path.join(BASEDIR, 'db.sqlite')
@@ -56,7 +52,7 @@ Migrate(app, db)
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-from project.admin.views import confused_word_blueprints
+from app.project.admin.views import confused_word_blueprints
 app.register_blueprint(confused_word_blueprints, url_prefix='/admin')
 
 
@@ -110,7 +106,7 @@ def upload_file():
 @app.route('/download', methods=['GET'])
 def download_file():
     # TODO: Change to relative
-    f = open('version.txt', 'r')
+    f = open('../version.txt', 'r')
     version = (f.read())
     f.close()
     name = f"EnglishTips_v.{version}.zip"
@@ -464,12 +460,3 @@ def text_summary():
         return json.dumps(result)
     except Exception as e:
         return str("Error: " + str(e))
-
-
-if __name__ == '__main__':
-    import ssl
-
-    context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-    context.load_cert_chain('avrl_cs_technion_ac_il.crt', 'AVRL_cs_technion_ac_il.key')
-    app.run(host="0.0.0.0", port=80, ssl_context=context, threaded=True, debug=False)
-    # app.run(debug=True)

@@ -1,7 +1,7 @@
 from os import listdir
 from os.path import isfile, join
 
-from functions.utils import find_first_char_index
+from app.utils import find_first_char_index
 
 
 def find_wordiness(text):

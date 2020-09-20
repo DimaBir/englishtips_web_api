@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="jumbotron">
+    <h1>Deleting a confused word from the database</h1>
+    <p>Please use the form below, to remove specific word from the database</p>
+    <form method="post">
+        {{ form.hidden_tag() }}
+        {{ form.word.label }} {{ form.word() }}
+        {{ form.submit() }}
+    </form>
+</div>
+{% endblock %}

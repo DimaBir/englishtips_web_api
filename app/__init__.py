@@ -105,11 +105,7 @@ def upload_file():
 
 @app.route('/download', methods=['GET'])
 def download_file():
-    # TODO: Change to relative
-    f = open('../version.txt', 'r')
-    version = (f.read())
-    f.close()
-    name = f"MySupervisor_v.{version}.zip"
+    name = "MySupervisor.zip"
     response = send_file(os.path.join(UPLOAD_FOLDER, "publish.zip"), as_attachment=True, mimetype="application/zip",
                          attachment_filename=name, cache_timeout=0)
     response.headers["x-filename"] = name

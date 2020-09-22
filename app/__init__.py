@@ -42,10 +42,9 @@ app.config['SECRET_KEY'] = 'ba86103dafb9ec379d26c7bd92206424'
 
 db.init_app(app)
 
-#
-# with app.app_context():
-# #     db.create_all()
-#       fill_database()
+
+with app.app_context():
+    db.create_all()
 
 Migrate(app, db)
 

@@ -1,3 +1,4 @@
+import os
 from app.utils import find_first_char_index
 
 
@@ -6,9 +7,9 @@ def find_uncountable_nouns(text=None):
     uncountable_nouns_result = []
     original_text = text
     text = text.split()
-
+    path = os.path.abspath(os.path.dirname(__file__))
     # Creates uncountable nouns dictionary
-    with open('../uncountable_nouns.txt') as file:
+    with open(os.path.join(path, '../uncountable_nouns.txt')) as file:
         for line in file:
             if len(line.strip()) == 0:
                 continue

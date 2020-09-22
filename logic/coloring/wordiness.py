@@ -1,3 +1,4 @@
+import os
 from os import listdir
 from os.path import isfile, join
 
@@ -12,7 +13,8 @@ def find_wordiness(text):
     original_text = text
     text = text.split()
 
-    path = "../wordiness/"
+    path = os.path.join(os.path.abspath(os.path.dirname(__file__)), "wordiness")
+    # path = "wordiness/"
     files = [f for f in listdir(path) if isfile(join(path, f))]
 
     for f in files:
@@ -23,7 +25,7 @@ def find_wordiness(text):
     for word in text:
         for key, values in wordiness.items():
             if word.lower() in values:
-                wordiness_dict[word.lower()] = open(join('wordiness/', key.replace("Group", "Examples")), "r",
+                wordiness_dict[word.lower()] = open(join(path, key.replace("Group", "Examples")), "r",
                                                     encoding="utf8").read()
 
     # Now find wordiness in text

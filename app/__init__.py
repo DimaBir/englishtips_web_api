@@ -109,7 +109,7 @@ def download_file():
     f = open('../version.txt', 'r')
     version = (f.read())
     f.close()
-    name = f"EnglishTips_v.{version}.zip"
+    name = f"MySupervisor_v.{version}.zip"
     response = send_file(os.path.join(UPLOAD_FOLDER, "publish.zip"), as_attachment=True, mimetype="application/zip",
                          attachment_filename=name, cache_timeout=0)
     response.headers["x-filename"] = name

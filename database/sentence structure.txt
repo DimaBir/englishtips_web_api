@@ -1,0 +1,14 @@
+thus	Sentence structure: SV. Thus, SV
+hence	Sentence structure: SV. hence, SV
+however	Sentence structure: SV. However, SV
+therefore	Sentence structure: SV. Therefore, SV
+furthermore	Sentence structure: SV. Furthermore, SV
+moreover	Sentence structure: SV. Furthermore, SV
+addition	Sentence structure: SV. In addition, SV
+afterwards	Sentence structure: SV; afterward, SV
+though	Sentence structure: SV, SV
+although	Sentence structure: SV, SV
+if	Sentence structure: SV, SV
+since	Sentence structure: SV, SV (No commas after since )
+when	Sentence structure: SV, SV
+which	No comma after which

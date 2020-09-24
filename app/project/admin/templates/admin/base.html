@@ -20,7 +20,6 @@
         <li class="nav-link"><a href="{{ url_for('admin.logout') }}">Logout</a></li>
         {% else %}
         <li class="nav-link"><a href="{{ url_for('admin.login') }}">Log In</a></li>
-            <li class="nav-link"><a href="{{ url_for('admin.register') }}">Register</a></li>
         {% endif %}
     </ul>
     {% block content %}

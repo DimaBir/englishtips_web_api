@@ -470,7 +470,7 @@ def text_summary():
         content = request.get_json()
         if len(content['text'].split()) < 1:
             return json.dumps({
-                "result": "Error: Text can`t be empty.",
+                "result": "Error: Selection is empty.",
                 "ServerExecutionTime": timer() - start
             })
         result = text_summarization(content['text'])

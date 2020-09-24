@@ -9,7 +9,9 @@ from timeit import default_timer as timer
 
 from flask_migrate import Migrate
 from werkzeug.utils import secure_filename
+from sqlalchemy_utils import database_exists
 
+from database.setupdatabase import fill_database
 from logic.coloring.acronyms import find_acronyms
 from logic.analytics.asl import avg_sentence_len
 from logic.tips.confused_word import get_confused_word
@@ -54,10 +56,6 @@ app.config['SECRET_KEY'] = 'ba86103dafb9ec379d26c7bd92206424'
 
 db.init_app(app)
 
-
-with app.app_context():
-    db.create_all()
-
 Migrate(app, db)
 
 login_manager.init_app(app)
@@ -65,6 +63,18 @@ login_manager.login_view = 'login'
 
 from app.project.admin.views import confused_word_blueprints
 app.register_blueprint(confused_word_blueprints, url_prefix='/admin')
+
+
+if not database_exists(app.config['SQLALCHEMY_DATABASE_URI']):
+    try:
+        with app.app_context():
+            db.create_all()
+            fill_database()
+    except Exception as e:
+        app.logger.error('{}\n{}'.format(e, traceback.format_exc()))
+
+
+####################################### VIEWS ###############################################
 
 
 @app.route('/')

@@ -470,7 +470,7 @@ def text_summary():
         content = request.get_json()
         if len(content['text'].split()) < 1:
             return json.dumps({
-                "result": "Error: What exactly you want to summarize in empty text?!",
+                "result": "Error: Text can`t be empty.",
                 "ServerExecutionTime": timer() - start
             })
         result = text_summarization(content['text'])

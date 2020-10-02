@@ -1,7 +1,10 @@
 from app import app
+
+from gevent import monkey
 from gevent.pywsgi import WSGIServer
 
 if __name__ == '__main__':
+    monkey.patch_all()
     import ssl
 
     context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)

@@ -43,10 +43,11 @@ def find_noun_compound(text: None):
     result = {}
     noun_compound_indexes = []
 
+    text = escape_special_characters(["[", "]", "{", "}", "(", ")", "*", "<", ">", "?", "+"], text)
+    original_text = text
     text = text.replace(".", " . ").replace(",", " , ").lower()
-    original_text = escape_special_characters(["[", "]", "{", "}", "(", ")", "*", "<", ">", "?", "+"], text)
 
-    tokens = nltk.word_tokenize(original_text)
+    tokens = nltk.word_tokenize(text)
     nouns = list(set([word for (word, pos) in nltk.pos_tag(tokens) if (pos[:2] == 'NN')]))
 
     # Finds all occurrences of nouns in text

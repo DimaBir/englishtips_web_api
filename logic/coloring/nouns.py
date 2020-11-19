@@ -1,7 +1,7 @@
 import re
 import nltk
 
-from app.utils import find_word_index, find_first_char_index
+from app.utils import find_word_index, find_first_char_index, escape_special_characters
 
 nltk.download('punkt')  # TODO: Ask do wee need to download it every time
 nltk.download('averaged_perceptron_tagger')
@@ -43,10 +43,10 @@ def find_noun_compound(text: None):
     result = {}
     noun_compound_indexes = []
 
-    original_text = text
     text = text.replace(".", " . ").replace(",", " , ").lower()
+    original_text = escape_special_characters(["[", "]", "{", "}", "(", ")", "*", "<", ">", "?", "+"], text)
 
-    tokens = nltk.word_tokenize(text)
+    tokens = nltk.word_tokenize(original_text)
     nouns = list(set([word for (word, pos) in nltk.pos_tag(tokens) if (pos[:2] == 'NN')]))
 
     # Finds all occurrences of nouns in text

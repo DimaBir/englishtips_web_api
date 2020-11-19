@@ -59,9 +59,9 @@ def find_first_char_index(text, word, one_based=False):
         elif start_index != 0 and end_index == len(text):  # End of string
             if is_letter(text, start_index - 1):
                 continue
-        # elif start_index != 0 and end_index != len(text):  # Middle of the string
-        #     if is_letter(text, start_index - 1) or is_letter(text, end_index):
-        #         continue
+        elif start_index != 0 and end_index != len(text):  # Middle of the string
+            if is_letter(text, start_index - 1) or is_letter(text, end_index):
+                continue
         indexes.append(start_index)
 
     return indexes, len(word)

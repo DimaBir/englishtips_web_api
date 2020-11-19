@@ -65,11 +65,6 @@ login_manager.login_view = 'login'
 from app.project.admin.views import confused_word_blueprints
 app.register_blueprint(confused_word_blueprints, url_prefix='/admin')
 
-try:
-    me = SingleInstance()
-except SingleInstanceException as e:
-    print(e)
-    exit(1)
 
 if not database_exists(app.config['SQLALCHEMY_DATABASE_URI']):
     try:

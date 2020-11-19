@@ -34,7 +34,7 @@ def is_letter(text, index):
 
 def escape_special_characters(characters: list, text: str) -> str:
     for char in characters:
-        text = text.replace(char, '\\' + char)
+        text = text.replace(char, ' ')
 
     return text
 
@@ -45,11 +45,11 @@ def find_first_char_index(text, word, one_based=False):
     indexes = []
 
     # Escapes special characters before regex
-    # escaped_text = escape_special_characters(["[", "]", "{", "}", "(", ")", "*", "<", ">", "?", "+"], text)
+    escaped_text = escape_special_characters(["[", "]", "{", "}", "(", ")", "*", "<", ">", "?", "+"], text)
     # escaped_word = re.escape(word)
 
     # Find match and check if this whole word
-    for m in re.finditer(word, text):
+    for m in re.finditer(word, escaped_text):
         start_index = m.start() + index_starts
         end_index = m.end() + index_starts
         # Its this is the first ord in string check end

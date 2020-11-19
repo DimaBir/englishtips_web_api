@@ -20,13 +20,13 @@ def find_verbs(text: None):
 
 def find_verbs_per_char(text: None):
     result = []
-    escaped_text = escape_special_characters(["[", "]", "{", "}", "(", ")", "*", "<", ">", "?", "+"], text)
-    tokens = nltk.word_tokenize(escaped_text)
+    # escaped_text = escape_special_characters(["[", "]", "{", "}", "(", ")", "*", "<", ">", "?", "+"], text)
+    tokens = nltk.word_tokenize(text)
     tagged = nltk.pos_tag(tokens)
     verbs = [tag[0] for tag in tagged if tag[1].startswith('V')]
 
     for verb in verbs:
-        indexes, length = find_first_char_index(escaped_text, verb, one_based=False)
+        indexes, length = find_first_char_index(text, verb, one_based=False)
         dic = {
             "Verb": verb,
             "VerbLength": length,

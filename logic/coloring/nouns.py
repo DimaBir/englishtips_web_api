@@ -43,7 +43,7 @@ def find_noun_compound(text: None):
     result = {}
     noun_compound_indexes = []
 
-    text = escape_special_characters(["[", "]", "{", "}", "(", ")", "*", "<", ">", "?", "+"], text)
+    # text = escape_special_characters(["[", "]", "{", "}", "(", ")", "*", "<", ">", "?", "+"], text)
     original_text = text
     text = text.replace(".", " . ").replace(",", " , ").lower()
 

@@ -22,7 +22,7 @@ def find_verbs_per_char(text: None):
     result = []
     tokens = nltk.word_tokenize(text)
     tagged = nltk.pos_tag(tokens)
-    verbs = [tag[0] for tag in tagged if tag[1].startswith('V')]
+    verbs = [tag[0] for tag in tagged if tag[1].startswith('V') and len(tag[0]) > 1]
 
     for verb in verbs:
         indexes, length = find_first_char_index(text, verb, one_based=False)

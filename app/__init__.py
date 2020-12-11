@@ -7,6 +7,7 @@ from timeit import default_timer as timer
 from flask_migrate import Migrate
 from werkzeug.utils import secure_filename
 
+from NLP import predict_class, init
 from logic.coloring.acronyms import find_acronyms
 from logic.analytics.asl import avg_sentence_len
 from logic.tips.confused_word import get_confused_word
@@ -39,8 +40,11 @@ app.config['MAX_CONTENT_LENGTH'] = MAX_UPLOAD_SIZE_MB * 1024 * 1024
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + SERVER_PATH
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'ba86103dafb9ec379d26c7bd92206424'
+app.config['MODEL'] = None
+app.config['DEVICE'] = None
 
 db.init_app(app)
+app.config['MODEL'], app.config['DEVICE'] = init()
 
 #
 # with app.app_context():
@@ -460,3 +464,53 @@ def text_summary():
         return json.dumps(result)
     except Exception as e:
         return str("Error: " + str(e))
+
+
+@app.route('/api/predict/<path:sentence>', methods=['POST'])
+def predict(sentence):
+    start = timer()
+    if not sentence:
+        result = {
+            "result": "Error: Sentence is empty",
+            "ServerExecutionTime": timer() - start
+        }
+    else:
+        prediction = predict_class(sentence=sentence, model=app.config['MODEL'], device=app.config['DEVICE'])
+        # not_wordy_0 = ("Among pathological hallmarks of AD are the senile plaques, which are formed by the copper induced aggregation of the amyloid beta peptides.", "Clear")
+        # not_wordy_1 = ("Unmixing results is highly affected from imaging geometry: camera/view zenithal and azimuth angles and light source direction.", "Clear")
+        # not_wordy_2 = ("The main idea of the DIP paper is using the network itself as the regularization for the corrupted image, without the need for training on thousandths of examples.", "Clear")
+        # not_wordy_3 = ("Imaging is taking a big part of our lives, sciences use imagery for discovering from which particles are moon or Mars made of, agricultures know to irrigate or fertilize their field according to imagery of their field..", "Clear")
+        # not_wordy_4 = ("Indeed, if parasites and pathogens follow the patterns predicted for other taxa, it is reasonable to expect that some diseases will adapt to changing environmental conditions and potentially increase in prevalence, whereas others will suffer negative consequences leading to range contractions and even local extinctions.", "Clear")
+        # not_wordy_5 = ("In my opinion torture is always wrong.", "Clear")
+        # not_wordy_6 = ("A few inches of snow is necessary to go sledding.", "Clear")
+        # not_wordy_7 = ("New students are required to attend a meeting on Friday, September 22.", "Clear")
+        # not_wordy_8 = ("I bought a dog for companionship.", "Clear")
+        # wordy_1 = ("In my research I'm following the long quest for cognitive system.", "Wordy")
+        # wordy_2 = ("This technique was proved to be efficient and accurate one, however, it still needneeds a primary expert analysis and not fully automatic.", "Wordy")
+        # wordy_3 = ("At first, it is rather surprising that it is an abstract thing.", "Wordy")
+        # wordy_4 = ("A few inches of snow on the ground is all that is necessary in order for a person to be able to go sledding.", "Wordy")
+        # wordy_5 = ("The subjects that are considered most important by students are those that have been shown to be useful to them after graduation.", "Wordy")
+        # wordy_6 = ("There are many students who like reading.", "Wordy")
+        # wordy_7 = ("As part of the Paris agreement which was  signed in 2015, the world’s nations have agreed to pursue efforts to limit global warming to 1.5oC above the pre-industrial levels, in light of the  risks of the climate crisis.", "Wordy")
+        # wordy_8 = ("The theory of lattices is a well developed one and has been used  to define the  real world objects known as crystals.", "Wordy")
+        # wordy_9 = ("I bought a dog for the purpose of providing me with companionship.", "Wordy")
+        #
+        # result_labels = []
+        # sentences = [not_wordy_0, not_wordy_1, not_wordy_2, not_wordy_3, not_wordy_4, not_wordy_5, not_wordy_6, not_wordy_7,
+        #              not_wordy_8, wordy_1, wordy_2, wordy_3, wordy_4, wordy_5, wordy_6, wordy_7, wordy_8, wordy_9]
+        #
+        # for sen in sentences:
+        #     result_labels.append(predict_class(sentence=sen[0], model=app.config['MODEL'], device=app.config['DEVICE']))
+        #
+        # i = 0
+        # correct = 0
+        # for label in result_labels:
+        #     # print("\n" + sentences[i][0] + "\nPrediction: (" + label + ") -- " + "Correct" if sentences[i][1] == label else "Wrong")
+        #     correct = correct + (1 if sentences[i][1] == label else 0)
+        #     i = i + 1
+
+        result = {
+            "result": prediction,
+            "ServerExecutionTime": timer() - start
+        }
+    return json.dumps(result)

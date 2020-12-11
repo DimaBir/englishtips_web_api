@@ -1,7 +1,7 @@
 import re
 import nltk
 
-from app.utils import find_word_index, find_first_char_index
+from app.utils import find_word_index, find_first_char_index, escape_special_characters
 
 nltk.download('punkt')  # TODO: Ask do wee need to download it every time
 nltk.download('averaged_perceptron_tagger')
@@ -43,6 +43,7 @@ def find_noun_compound(text: None):
     result = {}
     noun_compound_indexes = []
 
+    text = escape_special_characters(["[", "]", "{", "}", "(", ")", "*", "<", ">", "?", "+"], text)
     original_text = text
     text = text.replace(".", " . ").replace(",", " , ").lower()
 

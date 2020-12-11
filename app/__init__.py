@@ -1,13 +1,19 @@
 import os
 import json
+import logging
+import traceback
 
+from logging.handlers import RotatingFileHandler
 from nltk.corpus import wordnet
 from timeit import default_timer as timer
 
 from flask_migrate import Migrate
+from tendo.singleton import SingleInstance, SingleInstanceException
 from werkzeug.utils import secure_filename
+from sqlalchemy_utils import database_exists
 
 from NLP import predict_class, init
+from database.setupdatabase import fill_database
 from logic.coloring.acronyms import find_acronyms
 from logic.analytics.asl import avg_sentence_len
 from logic.tips.confused_word import get_confused_word
@@ -24,7 +30,7 @@ from logic.analytics.toptenwords import find_top_ten_words
 from logic.coloring.verbs import find_verbs, find_verbs_per_char
 from logic.coloring.nouns import find_noun_compound
 from logic.google_translate import google_translate
-from flask import Flask, render_template, request, url_for, flash, redirect, send_file
+from flask import Flask, render_template, request, url_for, flash, redirect, send_file, jsonify
 from flask_login import login_required
 
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
@@ -33,6 +39,15 @@ UPLOAD_FOLDER = r'C:/englishtips/englishtips_web_api/version/'
 ALLOWED_EXTENSIONS = {'txt', 'zip'}
 
 app = Flask(__name__, template_folder='templates')
+
+# Initialize the log handler
+logHandler = RotatingFileHandler(os.path.join(BASEDIR, 'siteLog.log'), maxBytes=1000000, backupCount=5, encoding='utf8')
+logHandler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
+# Set the log handler level
+logHandler.setLevel(logging.INFO)
+# Set the app logger level
+app.logger.setLevel(logging.INFO)
+app.logger.addHandler(logHandler)
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 MAX_UPLOAD_SIZE_MB = 2.5
@@ -46,11 +61,6 @@ app.config['DEVICE'] = None
 db.init_app(app)
 app.config['MODEL'], app.config['DEVICE'] = init()
 
-#
-# with app.app_context():
-# #     db.create_all()
-#       fill_database()
-
 Migrate(app, db)
 
 login_manager.init_app(app)
@@ -58,6 +68,18 @@ login_manager.login_view = 'login'
 
 from app.project.admin.views import confused_word_blueprints
 app.register_blueprint(confused_word_blueprints, url_prefix='/admin')
+
+
+if not database_exists(app.config['SQLALCHEMY_DATABASE_URI']):
+    try:
+        with app.app_context():
+            db.create_all()
+            fill_database()
+    except Exception as e:
+        app.logger.error('{}\n{}'.format(e, traceback.format_exc()))
+
+
+####################################### VIEWS ###############################################
 
 
 @app.route('/')
@@ -94,13 +116,6 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(UPLOAD_FOLDER, filename))
-            # f = open('version.txt', 'r+')
-            # old_version = (f.read())
-            # old_version = int(old_version)
-            # version = old_version + 1
-            # f.truncate(0)  # need '0' when using r+
-            # f.write(str(version))
-            # f.close()
             flash(f'{file.filename} uploaded successfully', 'success')
             return redirect(url_for('upload_file'))
 
@@ -148,7 +163,8 @@ def verbs2():
         return json.dumps(result_dic)
 
     except Exception as e:
-        return str("Error: " + str(e))
+        app.logger.error('In verbs2, error is: {}\n{}'.format(e, traceback.format_exc()))
+        return jsonify(result="failed")
 
 
 @app.route('/api/noun-compound', methods=['POST'])
@@ -165,7 +181,8 @@ def noun_compound():
         }
         return json.dumps(result)
     except Exception as e:
-        return str("Error: " + str(e))
+        app.logger.error('In noun_compound, error is: {}\n{}'.format(e, traceback.format_exc()))
+        return jsonify(result="failed")
 
 
 @app.route('/api/uncountable', methods=['POST'])
@@ -176,7 +193,8 @@ def uncountable():
         result = find_uncountable_nouns(content['text'])
         return json.dumps(result)
     except Exception as e:
-        return str("Error: " + str(e))
+        app.logger.error('In uncountable, error is: {}\n{}'.format(e, traceback.format_exc()))
+        return jsonify(result="failed")
 
 
 @app.route('/api/wordiness', methods=['POST'])
@@ -193,7 +211,8 @@ def wordiness():
         }
         return json.dumps(result)
     except Exception as e:
-        return str("Error: " + str(e))
+        app.logger.error('In wordiness, error is: {}\n{}'.format(e, traceback.format_exc()))
+        return jsonify(result="failed")
 
 
 @app.route('/api/topwords', methods=['POST'])
@@ -210,7 +229,8 @@ def top_words():
         }
         return json.dumps(result)
     except Exception as e:
-        return str("Error: " + str(e))
+        app.logger.error('In top_words, error is: {}\n{}'.format(e, traceback.format_exc()))
+        return jsonify(result="failed")
 
 
 @app.route('/api/syn', methods=['POST'])
@@ -236,7 +256,8 @@ def synonym():
 
         return json.dumps(result)
     except Exception as e:
-        return str("Error: " + str(e))
+        app.logger.error('In synonym, error is: {}\n{}'.format(e, traceback.format_exc()))
+        return jsonify(result="failed")
 
 
 @app.route('/api/acr', methods=['POST'])
@@ -263,7 +284,8 @@ def acronyms():
 
         return json.dumps(result)
     except Exception as e:
-        return str("Error: " + str(e))
+        app.logger.error('In acronyms, error is: {}\n{}'.format(e, traceback.format_exc()))
+        return jsonify(result="failed")
 
 
 @app.route('/api/hyper', methods=['POST'])
@@ -289,7 +311,8 @@ def hypernyms():
 
         return json.dumps(result)
     except Exception as e:
-        return str("Error: " + str(e))
+        app.logger.error('In hypernyms, error is: {}\n{}'.format(e, traceback.format_exc()))
+        return jsonify(result="failed")
 
 
 @app.route('/api/hypon', methods=['POST'])
@@ -315,7 +338,8 @@ def hyponyms():
 
         return json.dumps(result)
     except Exception as e:
-        return str("Error: " + str(e))
+        app.logger.error('In hyponyms, error is: {}\n{}'.format(e, traceback.format_exc()))
+        return jsonify(result="failed")
 
 
 @app.route('/api/confused_word', methods=['POST'])
@@ -342,7 +366,8 @@ def confused_word():
 
         return json.dumps(result)
     except Exception as e:
-        return str("Error: " + str(e))
+        app.logger.error('In confused_word, error is: {}\n{}'.format(e, traceback.format_exc()))
+        return jsonify(result="failed")
 
 
 @app.route('/api/sentence_structure', methods=['POST'])
@@ -369,7 +394,8 @@ def sentence_structure():
 
         return json.dumps(result)
     except Exception as e:
-        return str("Error: " + str(e))
+        app.logger.error('In sentence_structure, error is: {}\n{}'.format(e, traceback.format_exc()))
+        return jsonify(result="failed")
 
 
 @app.route('/api/asl', methods=['POST'])
@@ -393,7 +419,8 @@ def avg_sent_len():
 
         return json.dumps(result)
     except Exception as e:
-        return str("Error: " + str(e))
+        app.logger.error('In avg_sent_len, error is: {}\n{}'.format(e, traceback.format_exc()))
+        return jsonify(result="failed")
 
 
 @app.route('/api/useful', methods=['GET'])
@@ -407,7 +434,8 @@ def useful_phrases():
 
         return json.dumps(result)
     except Exception as e:
-        return str("Error: " + str(e))
+        app.logger.error('In useful_phrases, error is: {}\n{}'.format(e, traceback.format_exc()))
+        return jsonify(result="failed")
 
 
 @app.route('/api/translate', methods=['POST'])
@@ -419,7 +447,8 @@ def translate():
 
         return json.dumps(result)
     except Exception as e:
-        return str("Error: " + str(e))
+        app.logger.error('In translate, error is: {}\n{}'.format(e, traceback.format_exc()))
+        return jsonify(result="failed")
 
 
 # WordNet
@@ -446,7 +475,8 @@ def dictionary():
 
         return json.dumps(result)
     except Exception as e:
-        return str("Error: " + str(e))
+        app.logger.error('In dictionary, error is: {}\n{}'.format(e, traceback.format_exc()))
+        return jsonify(result="failed")
 
 
 @app.route('/api/summ', methods=['POST'])
@@ -454,7 +484,11 @@ def text_summary():
     try:
         start = timer()
         content = request.get_json()
-        print(content)
+        if len(content['text'].split()) < 1:
+            return json.dumps({
+                "result": "Error: Selection is empty.",
+                "ServerExecutionTime": timer() - start
+            })
         result = text_summarization(content['text'])
 
         result = {
@@ -463,6 +497,9 @@ def text_summary():
         }
         return json.dumps(result)
     except Exception as e:
+        app.logger.error('In text_summary, error is: {}\n{}'.format(e, traceback.format_exc()))
+        return jsonify(result="failed")
+
         return str("Error: " + str(e))
 
 

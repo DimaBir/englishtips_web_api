@@ -8,7 +8,6 @@ from nltk.corpus import wordnet
 from timeit import default_timer as timer
 
 from flask_migrate import Migrate
-from tendo.singleton import SingleInstance, SingleInstanceException
 from werkzeug.utils import secure_filename
 from sqlalchemy_utils import database_exists
 

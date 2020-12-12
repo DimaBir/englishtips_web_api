@@ -17,7 +17,6 @@
         {% if current_user.is_authenticated %}
         <li class="nav-link"><a href="{{ url_for('admin.add') }}">Add Confused Word</a></li>
         <li class="nav-link"><a href="{{ url_for('admin.list') }}">List Confused Words</a></li>
-            <li class="nav-link"><a href="{{ url_for('NLP') }}"><b>NLP</b></a></li>
         <li class="nav-link"><a href="{{ url_for('admin.logout') }}">Logout</a></li>
         {% else %}
         <li class="nav-link"><a href="{{ url_for('admin.login') }}">Log In</a></li>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+<!-- Core theme CSS (includes Bootstrap)-->
+    <link href="../static/css/styles.css" rel="stylesheet">
+    <!-- Fonts CSS-->
+    <link rel="stylesheet" href="../static/css/heading.css">
+    <link rel="stylesheet" href="../static/css/body.css">
+<!-- Font Awesome icons (free version)-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"
+            crossorigin="anonymous"></script>
+<body>
+<style>
+    #divElement {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 60%;
+        border-radius: 10px;
+        border: 1px solid;
+        border-color: lightgray;
+        box-shadow: 0 8px 6px -6px gray;
+        padding: 10px;
+    }
+
+    .center {
+        margin: auto;
+        width: 60%;
+        padding: 10px;
+        text-align: center;
+    }
+
+    .button {
+        border-radius: 4px;
+        background-color: #0063b2;
+        border: none;
+        font-size: 16px;
+        color: #FFFFFF;
+        text-align: center;
+        padding: 10px;
+        width: 100px;
+        transition: all 0.5s;
+        cursor: pointer;
+        margin: 5px;
+    }
+
+    .button:hover {
+        border-radius: 50px;
+        transition: 0.3s;
+    }
+
+    .button span {
+        cursor: pointer;
+        display: inline-block;
+        position: relative;
+        transition: 0.5s;
+    }
+
+    .button span:after {
+
+        content: '\00bb';
+        position: absolute;
+        opacity: 0;
+        top: 0;
+        right: -20px;
+        transition: 0.5s;
+    }
+
+    .button:hover span {
+        padding-right: 25px;
+    }
+
+    .button:hover span:after {
+        opacity: 1;
+        right: 0;
+    }
+</style>
+<nav class="navbar navbar-expand-lg bg-secondary fixed-top" id="mainNav">
+    <div class="container"><a class="navbar-brand js-scroll-trigger" href="#page-top" id="logo">MySupervisor</a>
+        <button class="navbar-toggler navbar-toggler-right font-weight-bold bg-primary text-white rounded" type="button"
+                data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive"
+                aria-expanded="false" aria-label="Toggle navigation">Menu <i class="fas fa-bars"></i></button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto" id="top-menu">
+                <li class="nav-item mx-0 mx-lg-1"><a
+                        class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger"
+                        href="https://avrl.cs.technion.ac.il:80/">HOME</a>
+                </li>
+                {% if current_user.is_authenticated %}
+                    <li class="nav-item mx-0 mx-lg-1"><a
+                            class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger"
+                            href="{{ url_for('admin.list') }}">Admin Panel</a></li>
+                    <li class="nav-item mx-0 mx-lg-1"><a
+                            class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger"
+                            href="{{ url_for('upload_file') }}">Upload</a></li>
+                    <li class="nav-item mx-0 mx-lg-1"><a
+                            class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger"
+                            href="{{ url_for('admin.logout') }}">Logout</a></li>
+                {% else %}
+                    <li class="nav-item mx-0 mx-lg-1"><a
+                            class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger"
+                            href="{{ url_for('admin.login') }}">Log In</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="center">
+    <form action="https://avrl.cs.technion.ac.il:80/">
+        <input type="submit" class="btn btn-primary" value="Back to main page"/>
+    </form>
+</div>
+<div id="divElement">
+    <div>
+        <form method="POST" role="form">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                <label for="sentence">{{ form.sentence.label }}</label>
+                <input type="text" class="form-control" id="sentence" name="sentence" aria-describedby="emailHelp"
+                       placeholder="Sentence">
+                <small id="emailHelp" class="form-text text-muted">* The calculations will take few seconds.</small>
+            </div>
+            <button type="submit" class="button"><span>Predict </span></button>
+        </form>
+        <br>
+        {% with errors = get_flashed_messages(category_filter=["success"]) %}
+            {% if errors %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    {%- for msg in errors %}
+                        {{ msg }}
+                    {% endfor -%}
+                </div>
+            {% endif %}
+        {% endwith %}
+        {% with errors = get_flashed_messages(category_filter=["error"]) %}
+            {% if errors %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    {%- for msg in errors %}
+                        {{ msg }}
+                    {% endfor -%}
+                </div>
+            {% endif %}
+        {% endwith %}
+    </div>
+</div>
+</body>
+</html>

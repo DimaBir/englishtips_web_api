@@ -16,13 +16,13 @@
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
 <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="../static/css/styles.css" rel="stylesheet">
-    <!-- Fonts CSS-->
-    <link rel="stylesheet" href="../static/css/heading.css">
-    <link rel="stylesheet" href="../static/css/body.css">
+<link href="../static/css/styles.css" rel="stylesheet">
+<!-- Fonts CSS-->
+<link rel="stylesheet" href="../static/css/heading.css">
+<link rel="stylesheet" href="../static/css/body.css">
 <!-- Font Awesome icons (free version)-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"
-            crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"
+        crossorigin="anonymous"></script>
 <body>
 <style>
     #divElement {
@@ -121,49 +121,55 @@
         </div>
     </div>
 </nav>
-<div class="center">
-    <form action="https://avrl.cs.technion.ac.il:80/">
-        <input type="submit" class="btn btn-primary" value="Back to main page"/>
-    </form>
-</div>
-<div id="divElement">
-    <div>
-        <form method="POST" role="form">
-            {{ form.hidden_tag() }}
-            <div class="form-group">
-                <label for="sentence">{{ form.sentence.label }}</label>
-                <input type="text" class="form-control" id="sentence" name="sentence" aria-describedby="emailHelp"
-                       placeholder="Sentence">
-                <small id="emailHelp" class="form-text text-muted">* The calculations will take few seconds.</small>
-            </div>
-            <button type="submit" class="button"><span>Predict </span></button>
-        </form>
-        <br>
-        {% with errors = get_flashed_messages(category_filter=["success"]) %}
-            {% if errors %}
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    {%- for msg in errors %}
-                        {{ msg }}
-                    {% endfor -%}
+{% if current_user.is_authenticated %}
+    <div id="divElement">
+        <div>
+            <form method="POST" role="form">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    <label for="sentence">{{ form.sentence.label }}</label>
+                    <input type="text" class="form-control" id="sentence" name="sentence" aria-describedby="emailHelp"
+                           placeholder="Sentence">
+                    <small id="emailHelp" class="form-text text-muted">* The calculations will take few seconds.</small>
                 </div>
-            {% endif %}
-        {% endwith %}
-        {% with errors = get_flashed_messages(category_filter=["error"]) %}
-            {% if errors %}
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    {%- for msg in errors %}
-                        {{ msg }}
-                    {% endfor -%}
-                </div>
-            {% endif %}
-        {% endwith %}
+                <button type="submit" class="button"><span>Predict </span></button>
+            </form>
+            <br>
+            {% with errors = get_flashed_messages(category_filter=["success"]) %}
+                {% if errors %}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        {%- for msg in errors %}
+                            {{ msg }}
+                        {% endfor -%}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            {% with errors = get_flashed_messages(category_filter=["error"]) %}
+                {% if errors %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        {%- for msg in errors %}
+                            {{ msg }}
+                        {% endfor -%}
+                    </div>
+                {% endif %}
+            {% endwith %}
+        </div>
     </div>
-</div>
+{% else %}
+    <section class="page-section bg-primary text-white mb-0" id="about">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="page-section-heading d-inline-block text-white">PLEASE <a
+                        href="{{ url_for('admin.login') }}">LOG IN</a></h2>
+            </div>
+        </div>
+    </section>
+{% endif %}
 </body>
 </html>

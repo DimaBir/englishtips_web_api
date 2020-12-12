@@ -67,14 +67,28 @@ def predict_class(sentence, model, device):
     sentence_dataloader = prepare_data(sentence=sentence)
     pred_label = evaluate_model(dataloader=sentence_dataloader, model=model, device=device)
 
+    # threshold = 0.2
+    # factor = 1.9
+    # delta = 0.02
+    # num_of_wordiness = 0
+    # wordiness_dict = find_wordiness(sentence)
+    # for index in range(len(wordiness_dict)):
+    #     num_of_wordiness = num_of_wordiness + len(wordiness_dict[index]['Indexes'])
+    # res = num_of_wordiness / len(sentence.split())
+    #
+    # if pred_label == 1 and res >= threshold:
+    #     result = "Wordy"
+    # elif pred_label == 1 and res < threshold:
+    #     result = "Clear" if res < threshold / factor + delta else "Wordy"
+    # elif pred_label == 0 and res < threshold:
+    #     result = "Clear"
+    # elif pred_label == 0 and res >= threshold:
+    #     result = "Wordy" if threshold*factor-delta < res else "Clear"
+    #     # TODO: Deal with "A few inches of snow is necessary to go sledding."
     threshold = 0.2
     factor = 1.9
     delta = 0.02
-    num_of_wordiness = 0
-    wordiness_dict = find_wordiness(sentence)
-    for index in range(len(wordiness_dict)):
-        num_of_wordiness = num_of_wordiness + len(wordiness_dict[index]['Indexes'])
-    res = num_of_wordiness / len(sentence.split())
+    res = len(find_wordiness(sentence)) / len(sentence.split())
 
     if pred_label == 1 and res >= threshold:
         result = "Wordy"
@@ -83,7 +97,7 @@ def predict_class(sentence, model, device):
     elif pred_label == 0 and res < threshold:
         result = "Clear"
     elif pred_label == 0 and res >= threshold:
-        result = "Wordy" if threshold*factor-delta < res else "Clear"
+        result = "Wordy" if threshold * factor - delta < res and res != 0.4 else "Clear"
         # TODO: Deal with "A few inches of snow is necessary to go sledding."
 
     return result

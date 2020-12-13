@@ -122,7 +122,7 @@
                             <hr>
                             <p class="mb-0">If you wish to improve predictions, you can <a
                                     href="{{ url_for('admin.add_sample') }}"
-                                    class="alert-link">add</a> the sentence to the dataset.</p>
+                                    class="alert-link" onclick="copyToClipboard()">add</a> the sentence to the dataset.</p>
                         </div>
                     {% endif %}
                 {% endwith %}
@@ -146,3 +146,12 @@
         </div>
     {% endif %}
 {% endblock content %}
+<script>
+function copyToClipboard() {
+  var copyText = document.getElementById("sentence");
+  copyText.select();
+  copyText.setSelectionRange(0, 99999)
+  document.execCommand("copy");
+  alert("Copied to buffer: " + copyText.value);
+}
+</script>

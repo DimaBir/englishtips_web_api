@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+<!-- Core theme CSS (includes Bootstrap)-->
+<link href="../static/css/styles.css" rel="stylesheet">
+<!-- Fonts CSS-->
+<link rel="stylesheet" href="../static/css/heading.css">
+<link rel="stylesheet" href="../static/css/body.css">
+<!-- Font Awesome icons (free version)-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"
+        crossorigin="anonymous"></script>
+<body>
+<nav class="navbar navbar-expand-lg bg-secondary fixed-top" id="mainNav">
+    <div class="container"><a class="navbar-brand js-scroll-trigger" href="#page-top" id="logo">MySupervisor</a>
+        <button class="navbar-toggler navbar-toggler-right font-weight-bold bg-primary text-white rounded" type="button"
+                data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive"
+                aria-expanded="false" aria-label="Toggle navigation">Menu <i class="fas fa-bars"></i></button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto" id="top-menu">
+                <li class="nav-item mx-0 mx-lg-1"><a
+                        class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger"
+                        href="https://avrl.cs.technion.ac.il:80/">HOME</a>
+                </li>
+                {% if current_user.is_authenticated %}
+                    <li class="nav-item mx-0 mx-lg-1"><a
+                            class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger"
+                            href="{{ url_for('admin.list') }}">Admin Panel</a></li>
+                    <li class="nav-item mx-0 mx-lg-1"><a
+                            class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger"
+                            href="{{ url_for('upload_file') }}">Upload</a></li>
+                    <li class="nav-item mx-0 mx-lg-1"><a
+                            class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger active"
+                            href="{{ url_for('nlp') }}"><u>NLP</u></a></li>
+                    <li class="nav-item mx-0 mx-lg-1"><a
+                            class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger"
+                            href="{{ url_for('admin.logout') }}">Logout</a></li>
+                {% else %}
+                    <li class="nav-item mx-0 mx-lg-1"><a
+                            class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger"
+                            href="{{ url_for('admin.login') }}">Log In</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

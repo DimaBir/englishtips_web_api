@@ -1,8 +1,9 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_required, logout_user, login_user
 
+from app.forms import DatasetForm
 from app.project import db
-from database.models import ConfusedWord, User
+from database.models import ConfusedWord, User, Dataset
 from app.project.admin.forms import AddForm, LoginForm, RegistrationForm
 
 confused_word_blueprints = Blueprint('admin', __name__, template_folder='templates/admin')
@@ -74,6 +75,24 @@ def add():
         flash(f"'{word}' - has been added to the database", "success")
         return redirect(url_for('admin.list'))
     return render_template('add.html', form=form)
+
+
+@confused_word_blueprints.route('/add_sample', methods=['GET', 'POST'])
+@login_required
+def add_sample():
+    form = DatasetForm()
+    if form.validate_on_submit():
+        sentence = form.sentence.data
+        label = form.label.data
+
+        # Add new sentence to database
+        new_sentence = Dataset(sentence, label)
+        db.session.add(new_sentence)
+        db.session.commit()
+
+        flash(f"'{new_sentence}' - has been added to the database", "success")
+        return redirect(url_for('admin.add_sample'))
+    return render_template('nlp_add_sample.html', form=form)
 
 
 @confused_word_blueprints.route('/list')

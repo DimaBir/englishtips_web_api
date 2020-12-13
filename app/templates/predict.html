@@ -94,6 +94,7 @@
                         <small id="emailHelp" class="form-text text-muted">*The calculations may take a few
                             seconds.</small>
                     </div>
+                    {{ form.recaptcha }}
                     <button type="submit" class="button"><span>Predict </span></button>
                 </form>
                 <br>
@@ -119,8 +120,9 @@
                                 {{ msg }}
                             {% endfor -%}
                             <hr>
-                            <p class="mb-0">If you wish to improve predictions, you can <a href="{{ url_for('admin.add_sample') }}" class="alert-link">add</a>
-                                the sentence to the dataset.</p>
+                            <p class="mb-0">If you wish to improve predictions, you can <a
+                                    href="{{ url_for('admin.add_sample', sentence=form.sentence.data) }}"
+                                    class="alert-link">add</a> the sentence to the dataset.</p>
                         </div>
                     {% endif %}
                 {% endwith %}

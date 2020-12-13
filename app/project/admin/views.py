@@ -77,21 +77,25 @@ def add():
     return render_template('add.html', form=form)
 
 
-@confused_word_blueprints.route('/add_sample', methods=['GET', 'POST'])
+@confused_word_blueprints.route('/add_sample/<sentence>', methods=['GET', 'POST'])
 @login_required
-def add_sample():
+def add_sample(sentence):
     form = DatasetForm()
+    form.sentence.data = sentence
     if form.validate_on_submit():
-        sentence = form.sentence.data
         label = form.label.data
 
-        # Add new sentence to database
-        new_sentence = Dataset(sentence, label)
-        db.session.add(new_sentence)
-        db.session.commit()
+        try:
+            # Add new sentence to database
+            new_sentence = Dataset(sentence.lower(), '1' if label == 'Wordy' else '0')
+            db.session.add(new_sentence)
+            db.session.commit()
+        except Exception as e:
+            flash(f"Error: {e}", "error")
+            return redirect(url_for('nlp'))
 
-        flash(f"'{new_sentence}' - has been added to the database", "success")
-        return redirect(url_for('admin.add_sample'))
+        flash(f"'{sentence}' - has been added to the database. Thank you!", "success")
+        return redirect(url_for('nlp'))
     return render_template('nlp_add_sample.html', form=form)
 
 

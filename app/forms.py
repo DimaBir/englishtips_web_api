@@ -6,7 +6,7 @@ from wtforms.validators import DataRequired, Length
 class PredictForm(FlaskForm):
 
     sentence = StringField("Please, type sentence to check for wordiness.")
-    # recaptcha = RecaptchaField()
+    recaptcha = RecaptchaField()
     submit = SubmitField("Check")
 
 
@@ -21,5 +21,5 @@ class DatasetForm(FlaskForm):
             ('0', 'Clear')
         ]
     )
-    # recaptcha = RecaptchaField()
+    recaptcha = RecaptchaField()
     submit = SubmitField("Add")

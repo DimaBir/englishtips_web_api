@@ -88,38 +88,14 @@
                     {{ form.hidden_tag() }}
                     <div class="form-group">
                         <label for="sentence">{{ form.sentence.label }}</label>
-                        <label for="label">{{ form.label.label }}</label><p>{{ form.label }}</p>
+                        <input type="text" class="form-control" id="sentence" name="sentence"
+                               value="{{ form.sentence.data }}">
+                        <br><label for="label">{{ form.label.label }}</label>
+                        <br>{{ form.label }}
                     </div>
-                    <button type="submit" class="button"><span>Predict </span></button>
+                    {{ form.recaptcha }}
+                    <button type="submit" class="button"><span>Add </span></button>
                 </form>
-                <br>
-                {% with errors = get_flashed_messages(category_filter=["success"]) %}
-                    {% if errors %}
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            {%- for msg in errors %}
-                                {{ msg }}
-                            {% endfor -%}
-                        </div>
-                    {% endif %}
-                {% endwith %}
-                {% with errors = get_flashed_messages(category_filter=["error"]) %}
-                    {% if errors %}
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            {%- for msg in errors %}
-                                {{ msg }}
-                            {% endfor -%}
-                            <hr>
-                            <p class="mb-0">If you wish to improve predictions, you can <a href="{{ url_for('admin.add_sample') }}" class="alert-link">add</a>
-                                the sentence to the dataset.</p>
-                        </div>
-                    {% endif %}
-                {% endwith %}
             </div>
         </div>
     {% else %}

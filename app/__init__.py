@@ -515,7 +515,7 @@ def nlp():
     prediction = None
     if form.validate_on_submit():
         sentence = form.sentence.data
-        form.sentence.data = ''
+        # form.sentence.data = ''
         if sentence == "":
             flash(f'Sentence is empty!', 'error')
             return render_template('predict.html', form=form, sentence=sentence, prediction=prediction)

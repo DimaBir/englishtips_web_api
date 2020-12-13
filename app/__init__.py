@@ -61,7 +61,6 @@ app.config['DEVICE'] = None
 # Recaptcha Config Section
 app.config['RECAPTCHA_PUBLIC_KEY'] = '6LcGrAQaAAAAANJDop7yTR9u8zsMe6A6PGM7TJex'
 app.config['RECAPTCHA_PRIVATE_KEY'] = '6LcGrAQaAAAAAMkUUvOv8aUanK-3paIgYX1JYg7h'
-app.config['RECAPTCHA_DATA_ATTRS'] = {'theme': 'light'}
 
 db.init_app(app)
 app.config['MODEL'], app.config['DEVICE'] = init()

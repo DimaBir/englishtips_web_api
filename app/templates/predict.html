@@ -128,11 +128,11 @@
                         <label for="sentence">{{ form.sentence.label }}</label>
                         <input type="text" class="form-control" id="sentence" name="sentence"
                                aria-describedby="emailHelp"
-                               placeholder="Sentence">
+                               placeholder="Sentence"><i class="far fa-copy" onclick="myFunction()"></i>
                         <small id="emailHelp" class="form-text text-muted">*The calculations may take a few
                             seconds.</small>
                     </div>
-                    {{ form.recaptcha }}
+
                     <button type="submit" class="button"><span>Predict </span></button>
                 </form>
                 <br>
@@ -191,6 +191,7 @@
         </div>
     {% endif %}
 {% endblock content %}
+{% block scripts %}
 <script>
     function myFunction() {
         var copyText = document.getElementById("sentence");
@@ -207,3 +208,4 @@
         tooltip.innerHTML = "Copy to clipboard";
     }
 </script>
+{% endblock scripts %}

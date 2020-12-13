@@ -128,11 +128,17 @@
                         <label for="sentence">{{ form.sentence.label }}</label>
                         <input type="text" class="form-control" id="sentence" name="sentence"
                                aria-describedby="emailHelp"
-                               placeholder="Sentence"><i class="far fa-copy" onclick="myFunction()"></i>
+                               placeholder="Sentence">
+                        <div class="tooltip">
+                            <button onclick="myFunction()" onmouseout="outFunc()">
+                                <span class="tooltiptext" id="myTooltip">Copy sentence to clipboard</span>
+                                <i class="far fa-copy"></i>
+                            </button>
+                        </div>
                         <small id="emailHelp" class="form-text text-muted">*The calculations may take a few
                             seconds.</small>
                     </div>
-
+                    {{ form.recaptcha }}
                     <button type="submit" class="button"><span>Predict </span></button>
                 </form>
                 <br>
@@ -163,12 +169,6 @@
                                     class="alert-link">add</a> the sentence to the dataset.
                             </p>
                         </div>
-                        <div class="tooltip">
-                            <button onclick="myFunction()" onmouseout="outFunc()">
-                                <span class="tooltiptext" id="myTooltip">Copy sentence to clipboard</span>
-                                Copy text
-                            </button>
-                        </div>
                     {% endif %}
                 {% endwith %}
             </div>
@@ -192,20 +192,20 @@
     {% endif %}
 {% endblock content %}
 {% block scripts %}
-<script>
-    function myFunction() {
-        var copyText = document.getElementById("sentence");
-        copyText.select();
-        copyText.setSelectionRange(0, 99999);
-        document.execCommand("copy");
+    <script>
+        function myFunction() {
+            var copyText = document.getElementById("sentence");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            document.execCommand("copy");
 
-        var tooltip = document.getElementById("myTooltip");
-        tooltip.innerHTML = "Copied: " + copyText.value;
-    }
+            var tooltip = document.getElementById("myTooltip");
+            tooltip.innerHTML = "Copied: " + copyText.value;
+        }
 
-    function outFunc() {
-        var tooltip = document.getElementById("myTooltip");
-        tooltip.innerHTML = "Copy to clipboard";
-    }
-</script>
+        function outFunc() {
+            var tooltip = document.getElementById("myTooltip");
+            tooltip.innerHTML = "Copy to clipboard";
+        }
+    </script>
 {% endblock scripts %}

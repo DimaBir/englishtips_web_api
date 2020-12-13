@@ -88,11 +88,7 @@
                     {{ form.hidden_tag() }}
                     <div class="form-group">
                         <label for="sentence">{{ form.sentence.label }}</label>
-                        <input type="text" class="form-control" id="sentence" name="sentence"
-                               aria-describedby="emailHelp"
-                               placeholder="Sentence">
-                        <small id="emailHelp" class="form-text text-muted">*The calculations may take a few
-                            seconds.</small>
+                        <label for="label">{{ form.label.label }}</label><p>{{ form.label }}</p>
                     </div>
                     <button type="submit" class="button"><span>Predict </span></button>
                 </form>

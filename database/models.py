@@ -52,6 +52,20 @@ class UsefulPhrases(db.Model):
         return self.phrase, self.example
 
 
+class Dataset(db.Model):
+    __tablename__ = 'dataset'
+
+    sentence = db.Column(db.Text, primary_key=True)
+    label = db.Column(db.Text)
+
+    def __init__(self, sentence, label):
+        self.sentence = sentence
+        self.label = label
+
+    def __repr__(self):
+        return self.sentence, self.label
+
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(user_id)

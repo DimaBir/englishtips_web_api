@@ -77,14 +77,13 @@ def add():
     return render_template('add.html', form=form)
 
 
-@confused_word_blueprints.route('/add_sample/<sentence>', methods=['GET', 'POST'])
+@confused_word_blueprints.route('/add_sample', methods=['GET', 'POST'])
 @login_required
-def add_sample(sentence):
+def add_sample():
     form = DatasetForm()
-    form.sentence.data = sentence
     if form.validate_on_submit():
         label = form.label.data
-
+        sentence = form.sentence.data
         try:
             # Add new sentence to database
             new_sentence = Dataset(sentence.lower(), '1' if label == 'Wordy' else '0')

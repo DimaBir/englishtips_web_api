@@ -129,12 +129,9 @@
                         <input type="text" class="form-control" id="sentence" name="sentence"
                                aria-describedby="emailHelp"
                                placeholder="Sentence">
-                        <div class="tooltip">
-                            <button onclick="myFunction()" onmouseout="outFunc()">
-                                <span class="tooltiptext" id="myTooltip">Copy sentence to clipboard</span>
-                                <i class="far fa-copy"></i>
-                            </button>
-                        </div>
+                        <button onclick="myFunction()">
+                            <i class="far fa-copy"></i>
+                        </button>
                         <small id="emailHelp" class="form-text text-muted">*The calculations may take a few
                             seconds.</small>
                     </div>
@@ -151,6 +148,11 @@
                             {%- for msg in errors %}
                                 {{ msg }}
                             {% endfor -%}
+                            <hr>
+                            <p class="mb-0">If you wish to improve predictions, you can <a
+                                    href="{{ url_for('admin.add_sample') }}"
+                                    class="alert-link">add</a> the sentence to the dataset.
+                            </p>
                         </div>
                     {% endif %}
                 {% endwith %}
@@ -198,14 +200,6 @@
             copyText.select();
             copyText.setSelectionRange(0, 99999);
             document.execCommand("copy");
-
-            var tooltip = document.getElementById("myTooltip");
-            tooltip.innerHTML = "Copied: " + copyText.value;
-        }
-
-        function outFunc() {
-            var tooltip = document.getElementById("myTooltip");
-            tooltip.innerHTML = "Copy to clipboard";
         }
     </script>
 {% endblock scripts %}

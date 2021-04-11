@@ -12,7 +12,7 @@ from tendo.singleton import SingleInstance, SingleInstanceException
 from werkzeug.utils import secure_filename
 from sqlalchemy_utils import database_exists
 
-from NLP import predict_class, init
+# from NLP import predict_class, init
 from app.forms import PredictForm
 from database.setupdatabase import fill_database
 from logic.coloring.acronyms import find_acronyms
@@ -508,28 +508,28 @@ def text_summary():
         return str("Error: " + str(e))
 
 
-@app.route('/NLP', methods=['GET', 'POST'])
-def nlp():
-    sentence = ""
-    form = PredictForm()
-    prediction = None
-    if form.validate_on_submit():
-        sentence = form.sentence.data
-        # form.sentence.data = ''
-        if sentence == "":
-            flash(f'Sentence is empty!', 'error')
-            return render_template('predict.html', form=form, sentence=sentence, prediction=prediction)
-        prediction = predict_class(sentence=sentence, model=app.config['MODEL'], device=app.config['DEVICE'])
-        if prediction == "Clear":
-            flash(f'\'{sentence}\' - Clear', 'success')
-        elif prediction == "Wordy":
-            flash(f'\'{sentence}\' - Wordy', 'error')
-    return render_template('predict.html', form=form, sentence=sentence, prediction=prediction)
+#@app.route('/NLP', methods=['GET', 'POST'])
+#def nlp():
+#    sentence = ""
+#    form = PredictForm()
+#    prediction = None
+#    if form.validate_on_submit():
+#        sentence = form.sentence.data
+#        # form.sentence.data = ''
+#        if sentence == "":
+#            flash(f'Sentence is empty!', 'error')
+#            return render_template('predict.html', form=form, sentence=sentence, prediction=prediction)
+#        prediction = predict_class(sentence=sentence, model=app.config['MODEL'], device=app.config['DEVICE'])
+#        if prediction == "Clear":
+#            flash(f'\'{sentence}\' - Clear', 'success')
+#        elif prediction == "Wordy":
+#            flash(f'\'{sentence}\' - Wordy', 'error')
+#    return render_template('predict.html', form=form, sentence=sentence, prediction=prediction)
 
 
-@app.route('/api/predict/<path:sentence>', methods=['POST'])
-def predict(sentence):
-    pass
+#@app.route('/api/predict/<path:sentence>', methods=['POST'])
+#def predict(sentence):
+#    pass
     # start = timer()
     # if not sentence:
     #     result = {

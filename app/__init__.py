@@ -64,7 +64,7 @@ app.config['RECAPTCHA_PUBLIC_KEY'] = '6LcGrAQaAAAAANJDop7yTR9u8zsMe6A6PGM7TJex'
 app.config['RECAPTCHA_PRIVATE_KEY'] = '6LcGrAQaAAAAAMkUUvOv8aUanK-3paIgYX1JYg7h'
 
 db.init_app(app)
-app.config['MODEL'], app.config['DEVICE'] = init()
+#app.config['MODEL'], app.config['DEVICE'] = init()
 
 Migrate(app, db)
 
